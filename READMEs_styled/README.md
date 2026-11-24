@@ -2,6 +2,7 @@
 
 An end-to-end supply chain analytics, data warehousing, business intelligence, and machine learning project built with SQL Server, Microsoft Power BI, and Python (Scikit-learn) to analyze sales, profitability, shipping delays, order cancellations, and predictive risk modeling on the **DataCo Smart Supply Chain** dataset (2015–2018).
 
+[![Supply Chain Dashboard Overview](<Power BI/dashboard/Overview.jpg>)](<Power BI/dashboard/Overview.jpg>)
 
 ## Business Problem
 
