@@ -26,19 +26,19 @@ Predicts whether an order will be delivered late (`0 = On Time`, `1 = Late`) pri
 
 ## Model Plots
 
-[![Figure 2026-11-23 052356 (16).png](<plots/Figure 2026-11-23 052356 (16).png>)](<plots/Figure 2026-11-23 052356 (16).png>)
+[![Figure 2026-11-23 052356 (16).png](plots/Figure%202026-11-23%20052356%20%2816%29.png)](plots/Figure%202026-11-23%20052356%20%2816%29.png)
 
-[![Figure 2026-11-23 052356 (17).png](<plots/Figure 2026-11-23 052356 (17).png>)](<plots/Figure 2026-11-23 052356 (17).png>)
+[![Figure 2026-11-23 052356 (17).png](plots/Figure%202026-11-23%20052356%20%2817%29.png)](plots/Figure%202026-11-23%20052356%20%2817%29.png)
 
-[![Figure 2026-11-23 052356 (18).png](<plots/Figure 2026-11-23 052356 (18).png>)](<plots/Figure 2026-11-23 052356 (18).png>)
+[![Figure 2026-11-23 052356 (18).png](plots/Figure%202026-11-23%20052356%20%2818%29.png)](plots/Figure%202026-11-23%20052356%20%2818%29.png)
 
-[![Figure 2026-11-23 052356 (19).png](<plots/Figure 2026-11-23 052356 (19).png>)](<plots/Figure 2026-11-23 052356 (19).png>)
+[![Figure 2026-11-23 052356 (19).png](plots/Figure%202026-11-23%20052356%20%2819%29.png)](plots/Figure%202026-11-23%20052356%20%2819%29.png)
 
-[![Figure 2026-11-23 052356 (20).png](<plots/Figure 2026-11-23 052356 (20).png>)](<plots/Figure 2026-11-23 052356 (20).png>)
+[![Figure 2026-11-23 052356 (20).png](plots/Figure%202026-11-23%20052356%20%2820%29.png)](plots/Figure%202026-11-23%20052356%20%2820%29.png)
 
-[![Figure 2026-11-23 052356 (21).png](<plots/Figure 2026-11-23 052356 (21).png>)](<plots/Figure 2026-11-23 052356 (21).png>)
+[![Figure 2026-11-23 052356 (21).png](plots/Figure%202026-11-23%20052356%20%2821%29.png)](plots/Figure%202026-11-23%20052356%20%2821%29.png)
 
-[![Figure 2026-11-23 052356 (22).png](<plots/Figure 2026-11-23 052356 (22).png>)](<plots/Figure 2026-11-23 052356 (22).png>)
+[![Figure 2026-11-23 052356 (22).png](plots/Figure%202026-11-23%20052356%20%2822%29.png)](plots/Figure%202026-11-23%20052356%20%2822%29.png)
 
-[![Figure 2026-11-23 052356 (23).png](<plots/Figure 2026-11-23 052356 (23).png>)](<plots/Figure 2026-11-23 052356 (23).png>)
+[![Figure 2026-11-23 052356 (23).png](plots/Figure%202026-11-23%20052356%20%2823%29.png)](plots/Figure%202026-11-23%20052356%20%2823%29.png)
 

@@ -2,7 +2,7 @@
 
 An end-to-end supply chain analytics, data warehousing, business intelligence, and machine learning project built with SQL Server, Microsoft Power BI, and Python (Scikit-learn) to analyze sales, profitability, shipping delays, order cancellations, and predictive risk modeling on the **DataCo Smart Supply Chain** dataset (2015–2018).
 
-[![Supply Chain Dashboard Overview](<Power BI/dashboard/Overview.jpg>)](<Power BI/dashboard/Overview.jpg>)
+[![Supply Chain Dashboard Overview](Power%20BI/dashboard/Overview.jpg)](Power%20BI/dashboard/Overview.jpg)
 
 ## Business Problem
 
@@ -74,24 +74,24 @@ The Power BI workbook (`Power BI/SupplyChain.pbix`) includes four main green-the
 
 ### 1. Overview
 
-[![Overview Dashboard](<Power BI/dashboard/Overview.jpg>)](<Power BI/dashboard/Overview.jpg>)
+[![Overview Dashboard](Power%20BI/dashboard/Overview.jpg)](Power%20BI/dashboard/Overview.jpg)
 - **KPI Cards:** Total Sales (`36.78M`), Total Profit (`3.97M`), Profit Margin % (`12%`), Total Orders (`66K`), Total Customers (`21K`), Avg Order Value (`502.71`).
 - **Charts:** Total Sales by month, Top 5 Products by Sales, Total Sales by market, and Total Sales by category.
 
 ### 2. Sales & Profit
 
-[![Sales & Profit Dashboard](<Power BI/dashboard/Sales_and_Profit.jpg>)](<Power BI/dashboard/Sales_and_Profit.jpg>)
+[![Sales & Profit Dashboard](Power%20BI/dashboard/Sales_and_Profit.jpg)](Power%20BI/dashboard/Sales_and_Profit.jpg)
 - **Charts:** Total Sales, Total Profit, and Total Cost by region; Top 10 categories by Total Profit; Top 10 categories by Total Sales; and Total Sales by customer segment (`Consumer` 51.91%, `Corporate` 30.36%, `Home Office` 17.73%).
 
 ### 3. Shipping & Cancel Rate
 
-[![Shipping & Cancel Rate Dashboard](<Power BI/dashboard/Shipping_and_Cancel_Rate.jpg>)](<Power BI/dashboard/Shipping_and_Cancel_Rate.jpg>)
+[![Shipping & Cancel Rate Dashboard](Power%20BI/dashboard/Shipping_and_Cancel_Rate.jpg)](Power%20BI/dashboard/Shipping_and_Cancel_Rate.jpg)
 - **KPI Cards:** Avg Scheduled Days (`2.93`), Avg Shipping Days (`3.50`), Cancel Rate % (`0.02`), Late Delivery % (`57.33%`), Avg Delay Days (`0.57`).
 - **Charts:** Late Delivery % by shipping mode, Top 10 categories by Cancel Rate %, Cancel Rate % by market, Avg Scheduled vs. Avg Shipping Days by shipping mode, and Total Orders by delivery status.
 
 ### 4. Predictive
 
-[![Predictive Dashboard](<Power BI/dashboard/Predictive.jpg>)](<Power BI/dashboard/Predictive.jpg>)
+[![Predictive Dashboard](Power%20BI/dashboard/Predictive.jpg)](Power%20BI/dashboard/Predictive.jpg)
 - **KPI Cards:** Delivery Accuracy (`69.70%`), Delivery Precision, Days R² (`0.39`), Delivery F1 (`66.30%`), Days MAE (`0.98`), Test Sample (`36.104K`).
 - **Charts:** Late Delivery Risk Feature Importance, Confusion Matrix (`Actual vs. Predicted`), Days For Shipping Feature Importance, and Actual vs. Predicted Avg. Shipping Days by Mode.
 

@@ -5,16 +5,16 @@ This directory contains the Power BI Desktop workbook (`SupplyChain.pbix`) and v
 ## Dashboard Pages
 
 ### Overview
-[![Overview](<dashboard/Overview.jpg>)](<dashboard/Overview.jpg>)
+[![Overview](dashboard/Overview.jpg)](dashboard/Overview.jpg)
 
 ### Sales & Profit
-[![Sales & Profit](<dashboard/Sales_and_Profit.jpg>)](<dashboard/Sales_and_Profit.jpg>)
+[![Sales & Profit](dashboard/Sales_and_Profit.jpg)](dashboard/Sales_and_Profit.jpg)
 
 ### Shipping & Cancel Rate
-[![Shipping & Cancel Rate](<dashboard/Shipping_and_Cancel_Rate.jpg>)](<dashboard/Shipping_and_Cancel_Rate.jpg>)
+[![Shipping & Cancel Rate](dashboard/Shipping_and_Cancel_Rate.jpg)](dashboard/Shipping_and_Cancel_Rate.jpg)
 
 ### Predictive
-[![Predictive](<dashboard/Predictive.jpg>)](<dashboard/Predictive.jpg>)
+[![Predictive](dashboard/Predictive.jpg)](dashboard/Predictive.jpg)
 
 ## Supporting Visuals
 
