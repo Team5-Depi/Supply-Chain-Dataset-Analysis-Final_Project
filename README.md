@@ -31,7 +31,7 @@ Both the original datasets and the cleaned dataset are stored in the `Data/` dir
 
 - SQL Server & T-SQL (Snowflake Schema & `.bak` backup)
 - Microsoft Power BI & DAX
-- Python
+- Python & Jupyter Notebook
 - Pandas
 - Scikit-learn (`StandardScaler`, `OneHotEncoder`, `SequentialFeatureSelector`, `LogisticRegression`, `LinearRegression`, `DecisionTreeClassifier`, `DecisionTreeRegressor`, `GridSearchCV`)
 - Matplotlib
@@ -121,6 +121,7 @@ supply-chain-dataset-analysis-final_project/
 │   │   ├── DescriptionDataCoSupplyChain.csv
 │   │   └── tokenized_access_logs.csv
 │   ├── Cleaned data/
+│   │   ├── Cleaning Data code.ipynb
 │   │   └── DataCoSupplyChain_Cleaned.csv
 │   └── README.md
 ├── Database/
@@ -152,7 +153,7 @@ supply-chain-dataset-analysis-final_project/
 
 ## Reproduction
 
-1. **Data:** Use `Data/Cleaned data/DataCoSupplyChain_Cleaned.csv` (or inspect raw files in `Data/Original data/`).
+1. **Data:** Run `Data/Cleaned data/Cleaning Data code.ipynb` on `Data/Original data/DataCoSupplyChainDataset.csv` to reproduce `Data/Cleaned data/DataCoSupplyChain_Cleaned.csv`.
 2. **SQL Server Database:** Extract `CoSupplyChain.bak` from `Database/Database.zip` and restore it in SQL Server Management Studio (SSMS) following `Database/Database_Schema.jpg`.
 3. **Predictive Models:** Run the three Python scripts inside `Prediction models/<Target>/` (`late_delivery_risk_clean.py`, `days_for_shipping_real_clean.py`, `benefit_per_order_clean.py`) to reproduce the `*_predictions.csv`, `*_comparison.csv`, `*_importance.csv` outputs and plots.
 4. **Power BI Dashboard:** Open `Power BI/SupplyChain.pbix` in Power BI Desktop, update data source paths if prompted, refresh the model, and explore all four dashboard pages.
@@ -171,7 +172,7 @@ Profiling and leakage-prevention steps applied before modeling:
 The project was completed collaboratively by **Team 5 (DEPI)**, with responsibilities divided across data cleaning, SQL Server warehousing, exploratory analysis, predictive modeling, and dashboard design:
 
 - **Mohamed Salah:** SQL Server database design, Snowflake Schema modeling (`fact_order_items` and dimension tables), SQL scripts, and database backup (`Database/Database.zip`).
-- **Donia Ragab and Dalia Hamdy:** Collaborated on data quality profiling, data cleaning (`Data/Cleaned data/DataCoSupplyChain_Cleaned.csv`), Exploratory Data Analysis (EDA), KPI definitions, DAX measures in Power BI (`Report/Analysis and Measures.docx`), and implementing the moving information ticker in the dashboard.
+- **Donia Ragab and Dalia Hamdy:** Collaborated on data quality profiling, data cleaning (`Data/Cleaned data/Cleaning Data code.ipynb` & `DataCoSupplyChain_Cleaned.csv`), Exploratory Data Analysis (EDA), KPI definitions, DAX measures in Power BI (`Report/Analysis and Measures.docx`), and implementing the moving information ticker in the dashboard.
 - **Omar El-Zayat:** Leakage-free predictive modeling in Python (`Scikit-learn`, `Pandas`, `Matplotlib`) across all three targets (`Late Delivery Risk`, `Days for Shipping Real`, `Benefit per Order`), Power BI predictive integration, and final modeling report (`Report/Predictive_Modeling_Report_Final.docx`).
 - **Menna Emad:** Interactive Power BI dashboard design, KPI cards, charts, slicers, visual layout, and final dashboard exports (`Power BI/SupplyChain.pbix` & `Power BI/dashboard/`).
 
