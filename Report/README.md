@@ -4,7 +4,7 @@ This directory contains the unified final graduation project report for the Supp
 
 ## Contents
 
-- `Supply_Chain_Dataset_Analysis_Report.docx`: Comprehensive 24-page technical and analytical report covering:
+- `Supply_Chain_Dataset_Analysis_Report.pdf`: Comprehensive 24-page technical and analytical report covering:
   - **Introduction & Project Goal**
   - **1. Project Planning:** 11 analytical questions, 3 predictive questions, scope & methodology, workflow, team roles, and risks & mitigation.
   - **2. Stakeholder Analysis:** Operational, financial, logistics, and data ownership stakeholders.

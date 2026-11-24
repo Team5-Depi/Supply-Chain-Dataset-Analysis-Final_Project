@@ -166,7 +166,7 @@ supply-chain-dataset-analysis-final_project/
 │   ├── Late Delivery Risk/
 │   └── README.md
 ├── Report/
-│   ├── Supply_Chain_Dataset_Analysis_Report.docx
+│   ├── Supply_Chain_Dataset_Analysis_Report.pdf
 │   └── README.md
 ├── Website/
 │   ├── Website.html
@@ -195,7 +195,7 @@ Profiling and leakage-prevention steps applied before modeling:
 
 The project was completed collaboratively by **Team 5 (DEPI)**, with responsibilities divided across data cleaning, SQL Server warehousing, exploratory analysis, predictive modeling, web development, and dashboard design:
 
-- **Omar El-Zayat (Team Leader):** Project coordination, leakage-free predictive modeling in Python (`Scikit-learn`, `Pandas`, `Matplotlib`) across all three targets (`Late Delivery Risk`, `Days for Shipping Real`, `Benefit per Order`), Power BI predictive integration, developing the interactive HTML web application (`Website/Website.html`), and compiling the final project report (`Report/Supply_Chain_Dataset_Analysis_Report.docx`).
+- **Omar El-Zayat (Team Leader):** Project coordination, leakage-free predictive modeling in Python (`Scikit-learn`, `Pandas`, `Matplotlib`) across all three targets (`Late Delivery Risk`, `Days for Shipping Real`, `Benefit per Order`), Power BI predictive integration, developing the interactive HTML web application (`Website/Website.html`), and compiling the final project report (`Report/Supply_Chain_Dataset_Analysis_Report.pdf`).
 - **Mohamed Salah:** SQL Server database design, Snowflake Schema modeling (`fact_order_items` and 18 dimension tables), SQL scripts, and database backup (`Database/Database.zip`).
 - **Donia Ragab and Dalia Hamdy:** Collaborated on data quality profiling, data cleaning (`Data/Cleaned data/Cleaning Data code.ipynb` & `DataCoSupplyChain_Cleaned.csv`), Exploratory Data Analysis (EDA), KPI definitions, DAX measures in Power BI, and implementing the moving information ticker in the dashboard.
 - **Menna Emad:** Interactive Power BI dashboard design, KPI cards, charts, slicers, visual layout, and final dashboard exports (`Power BI/SupplyChain.pbix` & `Power BI/dashboard/`).
@@ -203,4 +203,4 @@ The project was completed collaboratively by **Team 5 (DEPI)**, with responsibil
 ## References
 
 - **Dataset:** [DataCo Smart Supply Chain for Big Data Analysis — Kaggle](https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis) (2015–2018).
-- **Documentation:** [`Report/Supply_Chain_Dataset_Analysis_Report.docx`](Report/Supply_Chain_Dataset_Analysis_Report.docx).
+- **Documentation:** [`Report/Supply_Chain_Dataset_Analysis_Report.pdf`](Report/Supply_Chain_Dataset_Analysis_Report.pdf).
