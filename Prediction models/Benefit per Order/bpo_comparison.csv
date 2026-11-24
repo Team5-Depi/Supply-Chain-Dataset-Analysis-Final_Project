@@ -1,0 +1,4 @@
+﻿Model,R2,MSE,MAE
+Linear Regression,0.024,10037.371,54.068
+Decision Tree (Base),-0.011,10391.404,55.094
+Decision Tree (Tuned),0.023,10046.056,54.058
