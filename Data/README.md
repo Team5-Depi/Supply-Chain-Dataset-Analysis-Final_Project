@@ -17,6 +17,8 @@ Data/
 
 ## Dataset & Cleaning Details
 
+- **Source:** [DataCo Smart Supply Chain for Big Data Analysis — Kaggle](https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis)
+
 - **Original data (`Original data/`):**
   - `DataCoSupplyChainDataset.csv`: Raw transactional supply chain dataset (53 columns).
   - `DescriptionDataCoSupplyChain.csv`: Field-level data dictionary describing original columns.

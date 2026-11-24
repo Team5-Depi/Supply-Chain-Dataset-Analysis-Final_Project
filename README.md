@@ -24,6 +24,7 @@ Supply chain and e-commerce operations require clear visibility into sales perfo
 
 - **Original dataset:** `DataCoSupplyChainDataset.csv` (with `DescriptionDataCoSupplyChain.csv` data dictionary and `tokenized_access_logs.csv` clickstream logs).
 - **Prepared dataset:** `DataCoSupplyChain_Cleaned.csv` — **180,519 rows × 34 columns**, with zero missing values.
+- **Source:** [DataCo Smart Supply Chain for Big Data Analysis — Kaggle](https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis)
 
 Both the original datasets and the cleaned dataset are stored in the `Data/` directory (`Data/Original data/` and `Data/Cleaned data/`).
 
@@ -178,5 +179,5 @@ The project was completed collaboratively by **Team 5 (DEPI)**, with responsibil
 
 ## References
 
-- **Dataset:** DataCo Smart Supply Chain for Big Data Analysis (2015–2018).
+- **Dataset:** [DataCo Smart Supply Chain for Big Data Analysis — Kaggle](https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis) (2015–2018).
 - **Documentation:** `Report/Analysis and Measures.docx` and `Report/Predictive_Modeling_Report_Final.docx`.
