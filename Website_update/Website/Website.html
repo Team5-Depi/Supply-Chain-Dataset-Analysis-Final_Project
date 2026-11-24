@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supply Chain Analytics — Interactive Dashboard (Full CSV Support)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+:root {
+  --teal-deep: #08282e;
+  --teal-dark: #0d3a42;
+  --teal-card: #10454e;
+  --teal-mid: #1b6b73;
+  --teal-light: #4fa3a5;
+  --teal-soft: #96ced1;
+  --gold: #e6be4c;
+  --gold-bright: #f5d36c;
+  --cream: #f7f5ed;
+  --white: #ffffff;
+  --text-dark: #163036;
+  --muted: #647c82;
+  --danger: #d9534f;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: linear-gradient(135deg, var(--teal-deep) 0%, #0f4149 100%);
+  color: var(--white);
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+button, input, select { font-family: inherit; outline: none; }
+button { cursor: pointer; }
+
+/* ─── TOP HEADER ─── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 22px;
+  background: rgba(8, 40, 46, 0.94);
+  border-bottom: 2px solid var(--gold);
+}
+.brand-box { display: flex; align-items: center; gap: 12px; }
+.logo-circle {
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: var(--teal-dark);
+  display: grid; place-items: center;
+  font-size: 21px; color: var(--gold); flex-shrink: 0;
+}
+.brand-divider { width: 2px; height: 36px; background: rgba(230,190,76,0.5); }
+.brand-text h1 { font-size: 21px; font-weight: 800; color: var(--white); line-height: 1.1; }
+.brand-text h1 span { color: var(--gold); }
+.brand-text p { font-size: 11px; color: #c7dde0; letter-spacing: 0.7px; margin-top: 3px; }
+
+.top-filters { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.filter-box {
+  border: 1.5px solid var(--gold);
+  border-radius: 8px;
+  padding: 4px 10px 6px;
+  background: var(--teal-dark);
+  min-width: 125px;
+}
+.filter-box label { display: block; font-size: 10px; font-weight: 700; color: var(--gold); margin-bottom: 2px; }
+.filter-box select {
+  width: 100%; background: transparent; border: none; color: #fff; font-size: 12px; font-weight: 600; cursor: pointer;
+}
+.filter-box select option { background: var(--teal-deep); color: #fff; }
+
+.top-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.action-btn {
+  background: var(--teal-card); color: var(--gold);
+  border: 1.5px solid var(--gold); border-radius: 8px;
+  padding: 8px 12px; font-size: 12px; font-weight: 700; transition: 0.2s;
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.action-btn:hover { background: var(--gold); color: var(--teal-deep); }
+.action-btn.upload { background: var(--gold); color: var(--teal-deep); }
+.action-btn.upload:hover { background: var(--gold-bright); }
+.action-btn.danger { border-color: #f08080; color: #ffb3b3; }
+.action-btn.danger:hover { background: #d9534f; color: #fff; border-color: #d9534f; }
+
+/* ─── DATA STATUS BAR ─── */
+.status-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 22px;
+  background: rgba(16, 69, 78, 0.7);
+  border-bottom: 1px solid rgba(230,190,76,0.28);
+  font-size: 12px;
+  color: #d9ecee;
+}
+.status-strip strong { color: var(--gold-bright); }
+.status-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(8,40,46,0.75); border: 1px solid rgba(230,190,76,0.5);
+  padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; color: var(--gold-bright);
+}
+
+/* ─── LAYOUT ─── */
+.layout {
+  display: flex;
+  gap: 18px;
+  padding: 16px 20px 28px;
+  align-items: flex-start;
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 195px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  padding-top: 4px;
+  position: sticky;
+  top: 16px;
+}
+.nav-btn {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: 1.8px solid var(--gold);
+  background: rgba(13, 58, 66, 0.75);
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  transition: 0.2s;
+}
+.nav-btn:hover { background: rgba(230, 190, 76, 0.18); transform: translateY(-1px); }
+.nav-btn.active {
+  background: var(--gold);
+  color: var(--teal-deep);
+  box-shadow: 0 4px 14px rgba(230, 190, 76, 0.35);
+}
+
+/* ─── MAIN CANVAS (CREAM CONTAINER) ─── */
+.canvas-shell {
+  flex: 1;
+  min-width: 0;
+  background: var(--cream);
+  color: var(--text-dark);
+  border: 2.5px solid var(--gold);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.28);
+}
+
+.page { display: none; }
+.page.active { display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+.filter-banner {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff8df;
+  border: 1.5px solid var(--gold);
+  color: var(--teal-deep);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.filter-banner.show { display: flex; }
+.filter-banner button {
+  background: var(--teal-dark); color: var(--gold); border: none;
+  padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700;
+}
+
+/* ─── KPI CARDS ─── */
+.kpi-grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.kpi-grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.kpi-card {
+  background: var(--teal-dark);
+  border-radius: 10px;
+  padding: 14px 10px;
+  text-align: center;
+  border-bottom: 3px solid var(--gold);
+  box-shadow: 0 4px 10px rgba(8,40,46,0.15);
+}
+.kpi-card .k-label { font-size: 12px; font-weight: 700; color: #eef7f8; margin-bottom: 6px; }
+.kpi-card .k-val { font-size: 22px; font-weight: 800; color: var(--gold-bright); }
+
+/* ─── CHART CARDS ─── */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.chart-card {
+  background: var(--white);
+  border: 1px solid #dfd8c0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+.chart-head {
+  background: var(--teal-dark);
+  color: var(--white);
+  text-align: center;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.chart-body { padding: 14px; position: relative; height: 265px; width: 100%; }
+
+/* ─── TABLES ─── */
+.cm-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; text-align: center; }
+.cm-table th { padding: 10px; color: var(--teal-dark); border-bottom: 2px solid var(--teal-dark); }
+.cm-table td { padding: 14px 10px; font-weight: 700; border: 1px solid #e6e2d3; }
+.cm-hi { background: #cfe8eb; color: var(--teal-deep); }
+.cm-lo { background: #f3f1e8; color: var(--text-dark); }
+
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 820px; }
+.data-table th {
+  background: var(--teal-dark); color: var(--gold);
+  padding: 11px 10px; text-align: left; white-space: nowrap;
+}
+html[dir="rtl"] .data-table th, html[dir="rtl"] .data-table td { text-align: right; }
+.data-table td { padding: 10px; border-bottom: 1px solid #e6e2d3; color: var(--text-dark); }
+.data-table tr:hover td { background: #f0f7f7; }
+.pill { display: inline-block; padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 700; }
+.pill.late { background: #fde8e8; color: #b91c1c; }
+.pill.ok { background: #def7ec; color: #03543f; }
+.pill.cancel { background: #fef3c7; color: #92400e; }
+
+.pagination {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--teal-dark); flex-wrap: wrap; gap: 10px;
+}
+.pagination button {
+  background: var(--teal-dark); color: var(--gold); border: none;
+  padding: 7px 16px; border-radius: 8px; font-weight: 700;
+}
+.pagination button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ─── ADD ORDER FORM ─── */
+.form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 12px; font-weight: 700; color: var(--teal-dark); }
+.form-group input, .form-group select {
+  padding: 10px 12px; border: 1.5px solid #cbd5d6; border-radius: 8px;
+  background: #fff; color: var(--text-dark); font-size: 13px;
+}
+.form-group input:focus, .form-group select:focus { border-color: var(--teal-mid); }
+.submit-btn {
+  background: var(--teal-dark); color: var(--gold); border: 2px solid var(--gold);
+  padding: 11px 26px; border-radius: 999px; font-weight: 800; font-size: 14px;
+  margin-top: 14px; width: max-content;
+}
+.submit-btn:hover { background: var(--gold); color: var(--teal-deep); }
+
+/* ─── LOADER OVERLAY ─── */
+#loader {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(8, 40, 46, 0.88);
+  z-index: 999;
+  place-items: center;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+  padding: 20px;
+}
+#loader.show { display: flex; justify-content: center; align-items: center; }
+.spinner {
+  width: 52px; height: 52px;
+  border: 5px solid rgba(230,190,76,0.25);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#loaderText { font-size: 16px; font-weight: 700; color: var(--gold-bright); }
+#loaderSub { font-size: 12px; color: #cde2e4; }
+
+#toast {
+  position: fixed; bottom: 20px; right: 20px;
+  background: var(--teal-deep); color: var(--gold);
+  border: 1.5px solid var(--gold); padding: 12px 20px;
+  border-radius: 10px; font-weight: 700; font-size: 13px;
+  opacity: 0; transform: translateY(20px); pointer-events: none; transition: 0.25s; z-index: 99;
+}
+#toast.show { opacity: 1; transform: translateY(0); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1150px) {
+  .kpi-grid-6, .kpi-grid-5 { grid-template-columns: repeat(3, 1fr); }
+  .grid-3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .layout { flex-direction: column; padding: 12px; }
+  .sidebar { width: 100%; position: static; flex-direction: row; flex-wrap: wrap; gap: 8px; }
+  .nav-btn { flex: 1 1 130px; padding: 9px 10px; font-size: 12px; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .kpi-grid-6, .kpi-grid-5 { grid-template-columns: repeat(2, 1fr); }
+  .topbar { padding: 12px; }
+  .filter-box { flex: 1 1 45%; min-width: 0; }
+}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="spinner"></div>
+  <div id="loaderText">Loading CSV Data...</div>
+  <div id="loaderSub">Parsing rows directly in your browser</div>
+</div>
+
+<header class="topbar">
+  <div class="brand-box">
+    <div class="logo-circle">🚚</div>
+    <div class="brand-divider"></div>
+    <div class="brand-text">
+      <h1 id="t-title">Supply Chain <span>Analytics</span></h1>
+      <p id="t-sub">Sales • Shipping • Predictive Insights</p>
+    </div>
+  </div>
+
+  <div class="top-filters">
+    <div class="filter-box">
+      <label id="f-lbl-market">market_name</label>
+      <select id="fMarket" onchange="applyFilters()"><option value="All">All</option></select>
+    </div>
+    <div class="filter-box">
+      <label id="f-lbl-cat">category_name</label>
+      <select id="fCategory" onchange="applyFilters()"><option value="All">All</option></select>
+    </div>
+    <div class="filter-box">
+      <label id="f-lbl-ship">shipping_mode</label>
+      <select id="fShipping" onchange="applyFilters()"><option value="All">All</option></select>
+    </div>
+    <div class="filter-box">
+      <label id="f-lbl-seg">segment</label>
+      <select id="fSegment" onchange="applyFilters()"><option value="All">All</option></select>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="handleCSVUpload(event)">
+    <button class="action-btn upload" onclick="document.getElementById('csvFileInput').click()" id="btnUpload">📂 Upload CSV</button>
+    <button class="action-btn" onclick="toggleLang()" id="btnLang">عربي</button>
+    <button class="action-btn danger" onclick="resetData()" id="btnReset">Reset</button>
+  </div>
+</header>
+
+<div class="status-strip">
+  <div id="dataSourceText">Showing built-in sample. Click <strong>📂 Upload CSV</strong> to load <strong>DataCoSupplyChain_Cleaned.csv</strong> (180,519 rows).</div>
+  <div class="status-badge" id="rowCountBadge">55 Rows Loaded</div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <button class="nav-btn active" onclick="route('overview')" id="nav-overview">Overview</button>
+    <button class="nav-btn" onclick="route('sales')" id="nav-sales">Sales & Profit</button>
+    <button class="nav-btn" onclick="route('shipping')" id="nav-shipping">Shipping & Cancel Rate</button>
+    <button class="nav-btn" onclick="route('predictive')" id="nav-predictive">Predictive</button>
+    <button class="nav-btn" onclick="route('records')" id="nav-records">Data Records</button>
+    <button class="nav-btn" onclick="route('add')" id="nav-add">+ Add Order</button>
+  </aside>
+
+  <main class="canvas-shell">
+    <div class="filter-banner" id="intFilterBanner">
+      <span id="intFilterText">Active chart filter</span>
+      <button onclick="clearIntFilter()" id="btnClearInt">Clear Filter ✕</button>
+    </div>
+
+    <!-- 1. OVERVIEW -->
+    <section class="page active" id="page-overview">
+      <div class="kpi-grid-6" id="kpiOverview"></div>
+      <div class="grid-2">
+        <div class="chart-card">
+          <div class="chart-head">Total Sales by month_name</div>
+          <div class="chart-body"><canvas id="cSalesMonth"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">Top 5 Products by Sales</div>
+          <div class="chart-body"><canvas id="cTopProducts"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="chart-card">
+          <div class="chart-head">Total Sales by market_name</div>
+          <div class="chart-body"><canvas id="cSalesMarket"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">Total Sales by category_name</div>
+          <div class="chart-body"><canvas id="cSalesCatDonut"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. SALES & PROFIT -->
+    <section class="page" id="page-sales">
+      <div class="grid-2">
+        <div class="chart-card">
+          <div class="chart-head">Total Sales, Total Profit and Total Cost by region_name</div>
+          <div class="chart-body"><canvas id="cRegionSPC"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">Top 10 category by Total Profit</div>
+          <div class="chart-body"><canvas id="cTopCatProfit"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="chart-card">
+          <div class="chart-head">Top 10 category by Total Sales</div>
+          <div class="chart-body"><canvas id="cTopCatSales"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">Total Sales by segment</div>
+          <div class="chart-body"><canvas id="cSalesSegment"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SHIPPING & CANCEL RATE -->
+    <section class="page" id="page-shipping">
+      <div class="kpi-grid-5" id="kpiShipping"></div>
+      <div class="grid-3">
+        <div class="chart-card">
+          <div class="chart-head">Late Delivery % by shipping_mode</div>
+          <div class="chart-body"><canvas id="cLateByMode"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">Top 10 category by Cancel Rate %</div>
+          <div class="chart-body"><canvas id="cCancelByCat"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">Cancel Rate % by market_name</div>
+          <div class="chart-body"><canvas id="cCancelByMarket"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="chart-card">
+          <div class="chart-head">Avg Scheduled_Days and Avg Shipping Days by shipping_mode</div>
+          <div class="chart-body"><canvas id="cSchedVsReal"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">Total Orders by delivery_status</div>
+          <div class="chart-body"><canvas id="cDeliveryStatus"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PREDICTIVE -->
+    <section class="page" id="page-predictive">
+      <div class="kpi-grid-6">
+        <div class="kpi-card"><div class="k-label">Delivery Accuracy</div><div class="k-val">69.70%</div></div>
+        <div class="kpi-card"><div class="k-label">Delivery Precision</div><div class="k-val">84.92%</div></div>
+        <div class="kpi-card"><div class="k-label">Days R2</div><div class="k-val">0.39</div></div>
+        <div class="kpi-card"><div class="k-label">Delivery F1</div><div class="k-val">66.30%</div></div>
+        <div class="kpi-card"><div class="k-label">Days MAE</div><div class="k-val">0.98</div></div>
+        <div class="kpi-card"><div class="k-label">Test Sample</div><div class="k-val">36.104K</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="chart-card">
+          <div class="chart-head">Late Delivery Risk Feature Importance</div>
+          <div class="chart-body"><canvas id="cFeatLate"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">Late Delivery Risk Confusion Matrix (Actual vs. Predicted)</div>
+          <div class="chart-body" style="height:auto">
+            <table class="cm-table">
+              <thead><tr><th>Actual \ Pred</th><th>0 (On Time)</th><th>1 (Late)</th><th>Total</th></tr></thead>
+              <tbody>
+                <tr><td><strong>0</strong></td><td class="cm-hi">14,396</td><td class="cm-lo">1,912</td><td><strong>16,308</strong></td></tr>
+                <tr><td><strong>1</strong></td><td class="cm-lo">9,032</td><td class="cm-hi">10,764</td><td><strong>19,796</strong></td></tr>
+                <tr><td><strong>Total</strong></td><td><strong>23,428</strong></td><td><strong>12,676</strong></td><td><strong>36,104</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="chart-card">
+          <div class="chart-head">Days For Shipping Feature Importance</div>
+          <div class="chart-body"><canvas id="cFeatDays"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">Actual vs. Predicted Avg. Shipping Days By Mode</div>
+          <div class="chart-body"><canvas id="cActVsPred"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. DATA RECORDS (PAGINATED) -->
+    <section class="page" id="page-records">
+      <div class="chart-card">
+        <div class="chart-head" id="ch-rec">Supply Chain Orders Log</div>
+        <div style="padding:14px">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Market</th><th>Region</th><th>Segment</th><th>Category</th>
+                  <th>Shipping Mode</th><th>Delivery Status</th><th>Month</th>
+                  <th>Sales ($)</th><th>Profit ($)</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <button id="btnPrev" onclick="changePage(-1)">Prev</button>
+            <span id="pageInfo">Page 1 of 1</span>
+            <button id="btnNext" onclick="changePage(1)">Next</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. ADD ORDER -->
+    <section class="page" id="page-add">
+      <div class="chart-card">
+        <div class="chart-head" id="ch-add">Add New Supply Chain Order</div>
+        <form id="addForm" style="padding:18px">
+          <div class="form-grid">
+            <div class="form-group"><label>Market</label>
+              <select id="aMarket"><option>EUROPE</option><option>LATAM</option><option>PACIFIC ASIA</option><option>USCA</option><option>AFRICA</option></select>
+            </div>
+            <div class="form-group"><label>Region</label><input id="aRegion" value="WESTERN EUROPE" required></div>
+            <div class="form-group"><label>Segment</label>
+              <select id="aSegment"><option>CONSUMER</option><option>CORPORATE</option><option>HOME OFFICE</option></select>
+            </div>
+            <div class="form-group"><label>Category</label><input id="aCategory" value="FISHING" required></div>
+            <div class="form-group"><label>Product Name</label><input id="aProduct" value="FIELD & STREAM SPORTSMAN 16 GUN" required></div>
+            <div class="form-group"><label>Shipping Mode</label>
+              <select id="aMode"><option>STANDARD CLASS</option><option>SECOND CLASS</option><option>FIRST CLASS</option><option>SAME DAY</option></select>
+            </div>
+            <div class="form-group"><label>Delivery Status</label>
+              <select id="aDelStatus"><option>LATE DELIVERY</option><option>ADVANCE SHIPPING</option><option>SHIPPING ON TIME</option><option>SHIPPING CANCELED</option></select>
+            </div>
+            <div class="form-group"><label>Month</label>
+              <select id="aMonth"><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select>
+            </div>
+            <div class="form-group"><label>Sales ($)</label><input id="aSales" type="number" step="0.01" value="350" required></div>
+            <div class="form-group"><label>Profit ($)</label><input id="aProfit" type="number" step="0.01" value="85" required></div>
+            <div class="form-group"><label>Scheduled Days</label><input id="aSched" type="number" min="0" max="10" value="4" required></div>
+            <div class="form-group"><label>Real Shipping Days</label><input id="aReal" type="number" min="0" max="15" value="5" required></div>
+          </div>
+          <button type="submit" class="submit-btn" id="btnSaveOrder">Save Order</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="toast">Saved!</div>
+
+<script>
+const LSKEY_CUSTOM = 'supply_chain_custom_orders_v1';
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const PALETTE = ['#0d3a42','#14525c','#1b6b73','#2a858c','#4fa3a5','#7abec0','#a4d4d6','#c8e5e6','#e6be4c','#b59436'];
+
+// Built-in preview sample (55 rows) — replaced immediately when user uploads full CSV
+const RAW_SAMPLE = [
+["AFRICA","WEST AFRICA","CONSUMER","MEN'S FOOTWEAR","NIKE MEN'S CJ ELITE 2 TD","FIRST CLASS","LATE DELIVERY","PENDING_PAYMENT",10,129.99,28.39,1,2,1,46783,2929],
+["AFRICA","NORTH AFRICA","CONSUMER","CLEATS","PERFECT FITNESS PERFECT RIP DECK","FIRST CLASS","LATE DELIVERY","COMPLETE",10,299.95,98.38,1,2,1,47728,2654],
+["AFRICA","WEST AFRICA","HOME OFFICE","CAMPING & HIKING","DIAMONDBACK WOMEN'S SERENE","FIRST CLASS","LATE DELIVERY","COMPLETE",10,299.98,26.4,1,2,1,47627,1006],
+["AFRICA","EAST AFRICA","CONSUMER","WATER SPORTS","PELICAN SUNSTREAM 100 KAYAK","FIRST CLASS","LATE DELIVERY","COMPLETE",8,199.99,20.0,1,2,1,43084,2733],
+["AFRICA","NORTH AFRICA","HOME OFFICE","FISHING","FIELD & STREAM SPORTSMAN 16 GUN","FIRST CLASS","LATE DELIVERY","COMPLETE",8,399.98,-28.39,1,2,1,43406,4760],
+["AFRICA","SOUTHERN AFRICA","HOME OFFICE","INDOOR/OUTDOOR GAMES","O'BRIEN MEN'S NEOPRENE LIFE VEST","SAME DAY","SHIPPING ON TIME","COMPLETE",8,149.94,47.13,0,0,0,41887,11144],
+["AFRICA","EAST AFRICA","CONSUMER","WOMEN'S APPAREL","NIKE MEN'S DRI-FIT VICTORY GOLF","SAME DAY","SHIPPING ON TIME","COMPLETE",10,150.0,66.62,0,0,0,47224,2476],
+["AFRICA","NORTH AFRICA","HOME OFFICE","INDOOR/OUTDOOR GAMES","O'BRIEN MEN'S NEOPRENE LIFE VEST","SAME DAY","SHIPPING CANCELED","CANCELED",8,49.98,23.02,0,0,0,41886,12069],
+["AFRICA","CENTRAL AFRICA","CORPORATE","FISHING","FIELD & STREAM SPORTSMAN 16 GUN","SECOND CLASS","LATE DELIVERY","COMPLETE",10,399.98,117.17,2,4,1,46653,9433],
+["AFRICA","EAST AFRICA","HOME OFFICE","CARDIO EQUIPMENT","NIKE MEN'S FREE 5.0+ RUNNING","SECOND CLASS","LATE DELIVERY","PENDING_PAYMENT",11,399.96,35.2,2,5,1,48029,3754],
+["AFRICA","SOUTHERN AFRICA","CONSUMER","FISHING","FIELD & STREAM SPORTSMAN 16 GUN","STANDARD CLASS","ADVANCE SHIPPING","COMPLETE",7,399.98,136.11,4,3,0,41472,2043],
+["AFRICA","CENTRAL AFRICA","CONSUMER","WATER SPORTS","PELICAN SUNSTREAM 100 KAYAK","STANDARD CLASS","SHIPPING ON TIME","COMPLETE",10,199.99,82.32,4,4,0,47943,12316],
+["EUROPE","WESTERN EUROPE","CONSUMER","FISHING","FIELD & STREAM SPORTSMAN 16 GUN","FIRST CLASS","LATE DELIVERY","PENDING_PAYMENT",5,399.98,141.11,1,2,1,61638,2590],
+["EUROPE","WESTERN EUROPE","CORPORATE","CAMPING & HIKING","DIAMONDBACK WOMEN'S SERENE","FIRST CLASS","LATE DELIVERY","PENDING_PAYMENT",6,299.98,79.79,1,2,1,13445,291],
+["EUROPE","NORTHERN EUROPE","CONSUMER","WOMEN'S APPAREL","NIKE MEN'S DRI-FIT VICTORY GOLF","FIRST CLASS","LATE DELIVERY","PENDING_PAYMENT",6,150.0,6.83,1,2,1,63934,5626],
+["EUROPE","SOUTHERN EUROPE","CONSUMER","MEN'S FOOTWEAR","NIKE MEN'S CJ ELITE 2 TD","FIRST CLASS","LATE DELIVERY","COMPLETE",8,129.99,61.77,1,2,1,67430,290],
+["EUROPE","WESTERN EUROPE","HOME OFFICE","CONSUMER ELECTRONICS","INDUSTRIAL CONSUMER ELECTRONICS","FIRST CLASS","LATE DELIVERY","COMPLETE",10,252.88,45.94,1,2,1,71019,14572],
+["EUROPE","WESTERN EUROPE","CORPORATE","CARDIO EQUIPMENT","NIKE MEN'S FREE 5.0+ RUNNING","SAME DAY","SHIPPING ON TIME","COMPLETE",7,499.95,165.36,0,0,0,66547,7647],
+["EUROPE","WESTERN EUROPE","CORPORATE","CLEATS","PERFECT FITNESS PERFECT RIP DECK","SAME DAY","SHIPPING CANCELED","CANCELED",6,179.97,7.2,0,0,0,14053,10438],
+["EUROPE","SOUTHERN EUROPE","CORPORATE","FISHING","FIELD & STREAM SPORTSMAN 16 GUN","SAME DAY","SHIPPING ON TIME","COMPLETE",8,399.98,169.99,0,0,0,17127,5732],
+["EUROPE","WESTERN EUROPE","HOME OFFICE","WOMEN'S APPAREL","NIKE MEN'S DRI-FIT VICTORY GOLF","SECOND CLASS","LATE DELIVERY","COMPLETE",5,250.0,27.4,2,3,1,61662,5577],
+["EUROPE","NORTHERN EUROPE","CONSUMER","SHOP BY SPORT","UNDER ARMOUR GIRLS' TODDLER","SECOND CLASS","LATE DELIVERY","CLOSED",6,199.95,86.38,2,6,1,63335,10079],
+["EUROPE","SOUTHERN EUROPE","CORPORATE","WATER SPORTS","PELICAN SUNSTREAM 100 KAYAK","STANDARD CLASS","ADVANCE SHIPPING","COMPLETE",6,199.99,32.3,4,2,0,12511,1218],
+["EUROPE","NORTHERN EUROPE","CONSUMER","CARDIO EQUIPMENT","NIKE MEN'S FREE 5.0+ RUNNING","STANDARD CLASS","ADVANCE SHIPPING","COMPLETE",8,299.97,93.59,4,2,0,67516,6626],
+["LATAM","CENTRAL AMERICA","CORPORATE","CAMPING & HIKING","DIAMONDBACK WOMEN'S SERENE","FIRST CLASS","LATE DELIVERY","COMPLETE",3,299.98,96.32,1,2,1,7025,2074],
+["LATAM","CENTRAL AMERICA","CONSUMER","INDOOR/OUTDOOR GAMES","O'BRIEN MEN'S NEOPRENE LIFE VEST","FIRST CLASS","LATE DELIVERY","COMPLETE",2,249.9,19.35,1,2,1,4636,10099],
+["LATAM","CARIBBEAN","HOME OFFICE","CAMPING & HIKING","DIAMONDBACK WOMEN'S SERENE","FIRST CLASS","LATE DELIVERY","COMPLETE",3,299.98,93.89,1,2,1,57045,685],
+["LATAM","SOUTH AMERICA","CONSUMER","CAMPING & HIKING","DIAMONDBACK WOMEN'S SERENE","FIRST CLASS","LATE DELIVERY","CLOSED",4,299.98,64.8,1,2,1,58878,2242],
+["LATAM","SOUTH AMERICA","CORPORATE","INDOOR/OUTDOOR GAMES","O'BRIEN MEN'S NEOPRENE LIFE VEST","SAME DAY","LATE DELIVERY","PROCESSING",0,249.9,101.21,0,1,1,1290,6742],
+["LATAM","SOUTH AMERICA","HOME OFFICE","CLEATS","PERFECT FITNESS PERFECT RIP DECK","SAME DAY","LATE DELIVERY","CLOSED",2,299.95,33.22,0,1,1,55524,5454],
+["LATAM","SOUTH AMERICA","CONSUMER","WATER SPORTS","PELICAN SUNSTREAM 100 KAYAK","SAME DAY","SHIPPING ON TIME","COMPLETE",5,199.99,99.0,0,0,0,61068,3580],
+["LATAM","CENTRAL AMERICA","CORPORATE","SHOP BY SPORT","UNDER ARMOUR GIRLS' TODDLER","SECOND CLASS","LATE DELIVERY","COMPLETE",3,159.96,36.73,2,4,1,56398,2102],
+["LATAM","SOUTH AMERICA","CONSUMER","FISHING","FIELD & STREAM SPORTSMAN 16 GUN","SECOND CLASS","LATE DELIVERY","ON_HOLD",4,399.98,139.49,2,6,1,59420,2007],
+["LATAM","SOUTH AMERICA","CONSUMER","CAMPING & HIKING","DIAMONDBACK WOMEN'S SERENE","STANDARD CLASS","ADVANCE SHIPPING","PENDING_PAYMENT",0,299.98,113.39,4,2,0,136,9126],
+["LATAM","CARIBBEAN","CORPORATE","FISHING","FIELD & STREAM SPORTSMAN 16 GUN","STANDARD CLASS","LATE DELIVERY","CLOSED",2,399.98,178.59,4,5,1,4299,9605],
+["LATAM","CENTRAL AMERICA","CONSUMER","CARDIO EQUIPMENT","NIKE MEN'S FREE 5.0+ RUNNING","STANDARD CLASS","ADVANCE SHIPPING","COMPLETE",3,399.96,121.67,4,3,0,7107,3543],
+["PACIFIC ASIA","SOUTH ASIA","CONSUMER","CLEATS","PERFECT FITNESS PERFECT RIP DECK","FIRST CLASS","LATE DELIVERY","COMPLETE",1,119.98,19.36,1,2,1,27937,11901],
+["PACIFIC ASIA","SOUTHEAST ASIA","HOME OFFICE","SHOP BY SPORT","UNDER ARMOUR GIRLS' TODDLER","FIRST CLASS","LATE DELIVERY","PROCESSING",11,159.96,44.53,1,2,1,23017,5731],
+["PACIFIC ASIA","OCEANIA","CONSUMER","CAMPING & HIKING","DIAMONDBACK WOMEN'S SERENE","FIRST CLASS","LATE DELIVERY","PROCESSING",2,299.98,99.74,1,2,1,29138,11073],
+["PACIFIC ASIA","SOUTH ASIA","CONSUMER","INDOOR/OUTDOOR GAMES","O'BRIEN MEN'S NEOPRENE LIFE VEST","FIRST CLASS","LATE DELIVERY","COMPLETE",0,249.9,116.35,1,2,1,25110,3561],
+["PACIFIC ASIA","WEST ASIA","CORPORATE","CLEATS","PERFECT FITNESS PERFECT RIP DECK","SAME DAY","SHIPPING ON TIME","CLOSED",0,299.95,93.58,0,0,0,50721,792],
+["PACIFIC ASIA","SOUTH ASIA","CORPORATE","CAMPING & HIKING","DIAMONDBACK WOMEN'S SERENE","SAME DAY","SHIPPING ON TIME","PENDING_PAYMENT",9,299.98,84.65,0,0,0,44139,6028],
+["PACIFIC ASIA","SOUTHEAST ASIA","HOME OFFICE","FISHING","FIELD & STREAM SPORTSMAN 16 GUN","SECOND CLASS","LATE DELIVERY","PENDING_PAYMENT",11,399.98,128.69,2,5,1,24639,10256],
+["PACIFIC ASIA","EASTERN ASIA","CONSUMER","CAMPING & HIKING","DIAMONDBACK WOMEN'S SERENE","STANDARD CLASS","ADVANCE SHIPPING","CLOSED",11,299.98,107.99,4,2,0,23736,4787],
+["PACIFIC ASIA","OCEANIA","CONSUMER","WATER SPORTS","PELICAN SUNSTREAM 100 KAYAK","STANDARD CLASS","ADVANCE SHIPPING","CLOSED",2,199.99,82.72,4,2,0,30806,2591],
+["USCA","EAST OF USA","CORPORATE","FISHING","FIELD & STREAM SPORTSMAN 16 GUN","FIRST CLASS","LATE DELIVERY","PROCESSING",5,399.98,178.59,1,2,1,37291,6537],
+["USCA","SOUTH OF USA","HOME OFFICE","CAMPING & HIKING","DIAMONDBACK WOMEN'S SERENE","FIRST CLASS","LATE DELIVERY","COMPLETE",4,299.98,108.8,1,2,1,33941,8626],
+["USCA","WEST OF USA","HOME OFFICE","MEN'S FOOTWEAR","NIKE MEN'S CJ ELITE 2 TD","FIRST CLASS","SHIPPING CANCELED","CANCELED",5,129.99,54.99,1,2,0,36500,10815],
+["USCA","WEST OF USA","CONSUMER","CARDIO EQUIPMENT","NIKE MEN'S FREE 5.0+ RUNNING","SAME DAY","SHIPPING ON TIME","PENDING_PAYMENT",6,299.97,141.11,0,0,0,38522,11097],
+["USCA","US CENTER","CONSUMER","FISHING","FIELD & STREAM SPORTSMAN 16 GUN","SAME DAY","SHIPPING ON TIME","PENDING_PAYMENT",3,399.98,127.39,0,0,0,32198,9990],
+["USCA","CANADA","HOME OFFICE","CAMPING & HIKING","DIAMONDBACK WOMEN'S SERENE","SECOND CLASS","LATE DELIVERY","COMPLETE",10,299.98,63.78,2,4,1,47228,10658],
+["USCA","EAST OF USA","CONSUMER","WATER SPORTS","PELICAN SUNSTREAM 100 KAYAK","SECOND CLASS","LATE DELIVERY","PENDING_PAYMENT",5,199.99,73.8,2,6,1,35820,10413],
+["USCA","US CENTER","CONSUMER","GOLF SHOES","LIJA WOMEN'S EYELET SLEEVELESS","STANDARD CLASS","SHIPPING ON TIME","PROCESSING",3,325.0,140.4,4,4,0,31673,9230],
+["USCA","WEST OF USA","HOME OFFICE","WOMEN'S APPAREL","NIKE MEN'S DRI-FIT VICTORY GOLF","STANDARD CLASS","ADVANCE SHIPPING","COMPLETE",3,250.0,104.4,4,3,0,32562,5633],
+["USCA","EAST OF USA","CONSUMER","CAMPING & HIKING","DIAMONDBACK WOMEN'S SERENE","STANDARD CLASS","LATE DELIVERY","PENDING_PAYMENT",4,299.98,133.85,4,6,1,34215,8481]
+];
+
+function mapTuple(x) {
+  return {
+    market: x[0], region: x[1], segment: x[2], category: x[3], product: x[4],
+    mode: x[5], delStatus: x[6], orderStatus: x[7], monthIdx: x[8],
+    sales: x[9], profit: x[10], sched: x[11], real: x[12], late: x[13], orderId: x[14], custId: x[15]
+  };
+}
+
+let baseRecords = RAW_SAMPLE.map(mapTuple);
+let customOrders = [];
+let allRecords = [];
+let filteredCache = [];
+let csvFileName = null;
+let intFilter = { key: null, val: null };
+let charts = {};
+let page = 1;
+const PAGE_SIZE = 15;
+let lang = 'en';
+
+const i18n = {
+  en: {
+    title: 'Supply Chain <span>Analytics</span>', sub: 'Sales • Shipping • Predictive Insights',
+    nav: { overview:'Overview', sales:'Sales & Profit', shipping:'Shipping & Cancel Rate', predictive:'Predictive', records:'Data Records', add:'+ Add Order' },
+    btnUpload: '📂 Upload CSV', btnLang: 'عربي', btnReset: 'Reset', clearInt: 'Clear Filter ✕',
+    demoMsg: 'Showing built-in sample. Click <strong>📂 Upload CSV</strong> to load <strong>DataCoSupplyChain_Cleaned.csv</strong> (180,519 rows).',
+    loadedMsg: 'Active CSV File: <strong>{name}</strong> (Full Dataset Loaded in Memory)'
+  },
+  ar: {
+    title: 'تحليلات <span>سلاسل الإمداد</span>', sub: 'المبيعات • الشحن • الرؤى التنبؤية',
+    nav: { overview:'نظرة عامة', sales:'المبيعات والأرباح', shipping:'الشحن والإلغاء', predictive:'التنبؤات', records:'سجل البيانات', add:'+ إضافة طلب' },
+    btnUpload: '📂 رفع ملف CSV', btnLang: 'English', btnReset: 'استعادة', clearInt: 'إلغاء الفلتر ✕',
+    demoMsg: 'يعرض الآن عينة تجريبية. اضغط <strong>📂 رفع ملف CSV</strong> لاختيار ملف <strong>DataCoSupplyChain_Cleaned.csv</strong> (180,519 صف).',
+    loadedMsg: 'الملف المحمّل حالياً: <strong>{name}</strong> (تم تحميل كافة الصفوف بالكامل)'
+  }
+};
+
+function loadCustomOrders() {
+  try {
+    const s = JSON.parse(localStorage.getItem(LSKEY_CUSTOM));
+    if (Array.isArray(s)) customOrders = s;
+  } catch(e) { customOrders = []; }
+}
+function saveCustomOrders() {
+  try { localStorage.setItem(LSKEY_CUSTOM, JSON.stringify(customOrders)); } catch(e) {}
+}
+function rebuildAllRecords() {
+  allRecords = baseRecords.concat(customOrders);
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+function parseMonthIndex(dateStr) {
+  if (!dateStr) return 0;
+  const s = String(dateStr).trim();
+  // Format M/D/YYYY or M/D/YYYY H:M
+  const slash = s.indexOf('/');
+  if (slash > 0 && slash <= 2) {
+    const m = parseInt(s.slice(0, slash), 10);
+    if (m >= 1 && m <= 12) return m - 1;
+  }
+  // Format YYYY-MM-DD
+  const dash = s.indexOf('-');
+  if (dash === 4) {
+    const m = parseInt(s.slice(5, 7), 10);
+    if (m >= 1 && m <= 12) return m - 1;
+  }
+  const d = new Date(s);
+  return isNaN(d.getTime()) ? 0 : d.getMonth();
+}
+
+function handleCSVUpload(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  const loader = document.getElementById('loader');
+  document.getElementById('loaderText').textContent = lang==='ar' ? `جاري قراءة ${file.name}...` : `Parsing ${file.name}...`;
+  document.getElementById('loaderSub').textContent = lang==='ar' ? 'قد يستغرق الملف الضخم (180 ألف صف) بضع ثوانٍ فقط' : 'Processing up to 180,519 rows directly in browser...';
+  loader.classList.add('show');
+
+  setTimeout(() => {
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      encoding: 'ISO-8859-1',
+      complete: function(results) {
+        const rows = results.data;
+        const parsed = new Array(rows.length);
+        let count = 0;
+        for (let i = 0; i < rows.length; i++) {
+          const r = rows[i];
+          const market = (r['Market'] || r['market_name'] || '').trim();
+          if (!market) continue;
+          parsed[count++] = {
+            market: market.toUpperCase(),
+            region: (r['Order Region'] || r['region_name'] || 'UNKNOWN').trim().toUpperCase(),
+            segment: (r['Customer Segment'] || r['segment'] || 'CONSUMER').trim().toUpperCase(),
+            category: (r['Category Name'] || r['category_name'] || 'OTHER').trim().toUpperCase(),
+            product: (r['Product Name'] || 'PRODUCT').trim().toUpperCase(),
+            mode: (r['Shipping Mode'] || r['shipping_mode'] || 'STANDARD CLASS').trim().toUpperCase(),
+            delStatus: (r['Delivery Status'] || r['delivery_status'] || 'SHIPPING ON TIME').trim().toUpperCase(),
+            orderStatus: (r['Order Status'] || 'COMPLETE').trim().toUpperCase(),
+            monthIdx: parseMonthIndex(r['order date (DateOrders)'] || r['order_date']),
+            sales: parseFloat(r['Sales']) || 0,
+            profit: parseFloat(r['Benefit per order']) || 0,
+            sched: parseFloat(r['Days for shipment (scheduled)']) || 0,
+            real: parseFloat(r['Days for shipping (real)']) || 0,
+            late: parseInt(r['Late_delivery_risk'], 10) === 1 ? 1 : 0,
+            orderId: r['Order Id'] || i,
+            custId: r['Customer Id'] || i
+          };
+        }
+        parsed.length = count;
+        loader.classList.remove('show');
+        if (count === 0) {
+          toast(lang==='ar' ? 'تعذر قراءة الأعمدة من الملف!' : 'Could not detect expected columns!');
+          return;
+        }
+        baseRecords = parsed;
+        csvFileName = file.name;
+        intFilter = { key: null, val: null };
+        page = 1;
+        rebuildAllRecords();
+        populateFilters();
+        updateStatusStrip();
+        updateAll();
+        toast(lang==='ar' ? `تم تحميل ${count.toLocaleString()} صف بنجاح!` : `Loaded ${count.toLocaleString()} rows successfully!`);
+      },
+      error: function() {
+        loader.classList.remove('show');
+        toast(lang==='ar' ? 'حدث خطأ أثناء قراءة الملف' : 'Error reading CSV file');
+      }
+    });
+  }, 60);
+}
+
+function resetData() {
+  if (confirm(lang==='ar' ? 'استعادة العينة الأصلية وحذف الإضافات اليدوية؟' : 'Restore built-in sample and clear custom added orders?')) {
+    localStorage.removeItem(LSKEY_CUSTOM);
+    customOrders = [];
+    baseRecords = RAW_SAMPLE.map(mapTuple);
+    csvFileName = null;
+    intFilter = { key: null, val: null };
+    document.getElementById('csvFileInput').value = '';
+    rebuildAllRecords();
+    populateFilters();
+    updateStatusStrip();
+    updateAll();
+    toast(lang==='ar' ? 'تمت الاستعادة' : 'Data restored');
+  }
+}
+
+function updateStatusStrip() {
+  const t = i18n[lang];
+  document.getElementById('dataSourceText').innerHTML = csvFileName
+    ? t.loadedMsg.replace('{name}', csvFileName)
+    : t.demoMsg;
+  const totalTxt = allRecords.length.toLocaleString();
+  document.getElementById('rowCountBadge').textContent = lang==='ar' ? `${totalTxt} صف محمّل` : `${totalTxt} Rows Loaded`;
+}
+
+function populateFilters() {
+  const mSet = new Set(), cSet = new Set(), sSet = new Set(), gSet = new Set();
+  for (let i = 0; i < allRecords.length; i++) {
+    const r = allRecords[i];
+    mSet.add(r.market); cSet.add(r.category); sSet.add(r.mode); gSet.add(r.segment);
+  }
+  const fill = (id, set) => {
+    const el = document.getElementById(id);
+    const cur = el.value;
+    const arr = Array.from(set).sort();
+    el.innerHTML = '<option value="All">All</option>' + arr.map(v => `<option value="${v}">${v}</option>`).join('');
+    if (set.has(cur)) el.value = cur;
+  };
+  fill('fMarket', mSet);
+  fill('fCategory', cSet);
+  fill('fShipping', sSet);
+  fill('fSegment', gSet);
+}
+
+function toggleIntFilter(key, val) {
+  intFilter = (intFilter.key===key && intFilter.val===val) ? { key:null, val:null } : { key, val };
+  page = 1; updateAll();
+}
+function clearIntFilter() { intFilter = { key:null, val:null }; page = 1; updateAll(); }
+function applyFilters() { page = 1; updateAll(); }
+
+function fmt(n) {
+  if (Math.abs(n) >= 1e6) return (n/1e6).toFixed(2) + 'M';
+  if (Math.abs(n) >= 1e3) return (n/1e3).toFixed(2) + 'K';
+  return Number(n).toFixed(2);
+}
+
+function mkChart(id, type, data, opts={}) {
+  if (charts[id]) charts[id].destroy();
+  const fastAnim = filteredCache.length > 5000 ? false : { duration: 350 };
+  charts[id] = new Chart(document.getElementById(id), {
+    type, data,
+    options: Object.assign({
+      responsive: true, maintainAspectRatio: false,
+      animation: fastAnim,
+      plugins: { legend: { display: false } },
+      scales: (type==='doughnut' || type==='pie') ? {} : {
+        x: { grid: { display: false }, ticks: { color: '#334e54', font: { size: 10 } } },
+        y: { grid: { color: '#ece9dc' }, ticks: { color: '#334e54', font: { size: 10 } } }
+      }
+    }, opts)
+  });
+}
+
+// Ultra-fast single-pass aggregation engine for 180,519+ rows
+function updateAll() {
+  const fm = document.getElementById('fMarket').value;
+  const fc = document.getElementById('fCategory').value;
+  const fs = document.getElementById('fShipping').value;
+  const fg = document.getElementById('fSegment').value;
+  const ik = intFilter.key, iv = intFilter.val;
+
+  const filtered = [];
+  let totSales = 0, totProfit = 0, totSched = 0, totReal = 0, lateCnt = 0, cancelCnt = 0;
+  const orderSet = new Set(), custSet = new Set();
+  const mSales = new Float64Array(12);
+  const prodSales = Object.create(null);
+  const mktSales = Object.create(null);
+  const mktCnt = Object.create(null);
+  const mktCanc = Object.create(null);
+  const catSales = Object.create(null);
+  const catProfit = Object.create(null);
+  const catCnt = Object.create(null);
+  const catCanc = Object.create(null);
+  const regStats = Object.create(null);
+  const segSales = Object.create(null);
+  const modeStats = Object.create(null);
+  const delMap = Object.create(null);
+
+  for (let i = 0; i < allRecords.length; i++) {
+    const r = allRecords[i];
+    if (fm!=='All' && r.market!==fm) continue;
+    if (fc!=='All' && r.category!==fc) continue;
+    if (fs!=='All' && r.mode!==fs) continue;
+    if (fg!=='All' && r.segment!==fg) continue;
+    if (ik && r[ik]!==iv) continue;
+
+    filtered.push(r);
+    totSales += r.sales;
+    totProfit += r.profit;
+    totSched += r.sched;
+    totReal += r.real;
+    if (r.late === 1) lateCnt++;
+    const isCanc = r.delStatus === 'SHIPPING CANCELED' || r.orderStatus === 'CANCELED';
+    if (isCanc) cancelCnt++;
+
+    orderSet.add(r.orderId);
+    custSet.add(r.custId);
+
+    mSales[r.monthIdx] += r.sales;
+    prodSales[r.product] = (prodSales[r.product] || 0) + r.sales;
+
+    mktSales[r.market] = (mktSales[r.market] || 0) + r.sales;
+    mktCnt[r.market] = (mktCnt[r.market] || 0) + 1;
+    if (isCanc) mktCanc[r.market] = (mktCanc[r.market] || 0) + 1;
+
+    catSales[r.category] = (catSales[r.category] || 0) + r.sales;
+    catProfit[r.category] = (catProfit[r.category] || 0) + r.profit;
+    catCnt[r.category] = (catCnt[r.category] || 0) + 1;
+    if (isCanc) catCanc[r.category] = (catCanc[r.category] || 0) + 1;
+
+    let rg = regStats[r.region];
+    if (!rg) rg = regStats[r.region] = { s:0, p:0, c:0 };
+    rg.s += r.sales; rg.p += r.profit; rg.c += (r.sales - r.profit);
+
+    segSales[r.segment] = (segSales[r.segment] || 0) + r.sales;
+
+    let ms = modeStats[r.mode];
+    if (!ms) ms = modeStats[r.mode] = { cnt:0, late:0, sched:0, real:0 };
+    ms.cnt++; ms.late += r.late; ms.sched += r.sched; ms.real += r.real;
+
+    delMap[r.delStatus] = (delMap[r.delStatus] || 0) + 1;
+  }
+
+  filteredCache = filtered;
+  const n = filtered.length || 1;
+
+  // Filter Banner
+  const b = document.getElementById('intFilterBanner');
+  if (ik) {
+    b.classList.add('show');
+    document.getElementById('intFilterText').textContent = (lang==='ar'?'فلتر نشط: ':'Active Filter: ') + iv;
+  } else b.classList.remove('show');
+
+  // 1. Overview KPIs
+  const orders = orderSet.size;
+  const custs = custSet.size;
+  const margin = totSales ? (totProfit / totSales * 100).toFixed(1) + '%' : '0%';
+  const aov = orders ? (totSales / orders).toFixed(2) : '0';
+
+  document.getElementById('kpiOverview').innerHTML = [
+    ['Total Sales', fmt(totSales)],
+    ['Total Profit', fmt(totProfit)],
+    ['Profit Margin %', margin],
+    ['Total Orders', fmt(orders)],
+    ['Total Customers', fmt(custs)],
+    ['Avg Order Value', aov]
+  ].map(([l,v]) => `<div class="kpi-card"><div class="k-label">${l}</div><div class="k-val">${v}</div></div>`).join('');
+
+  // Overview Charts
+  mkChart('cSalesMonth', 'line', {
+    labels: MONTHS.map(m => m.slice(0,3)),
+    datasets: [{ data: Array.from(mSales), borderColor: '#0d3a42', backgroundColor: 'rgba(13,58,66,0.1)', fill: true, tension: 0.35, pointRadius: 3 }]
+  });
+
+  const topProd = Object.entries(prodSales).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  mkChart('cTopProducts', 'bar', {
+    labels: topProd.map(x => x[0].length>26 ? x[0].slice(0,26)+'…' : x[0]),
+    datasets: [{ data: topProd.map(x=>x[1]), backgroundColor: '#0d3a42', borderRadius: 4 }]
+  }, { indexAxis: 'y' });
+
+  const mktArr = Object.entries(mktSales).sort((a,b)=>b[1]-a[1]);
+  mkChart('cSalesMarket', 'bar', {
+    labels: mktArr.map(x=>x[0]),
+    datasets: [{ data: mktArr.map(x=>x[1]), backgroundColor: mktArr.map(x=>iv===x[0]?'#e6be4c':'#0d3a42'), borderRadius: 4 }]
+  }, { onClick: (e,els) => { if(els.length) toggleIntFilter('market', mktArr[els[0].index][0]); } });
+
+  const catArr = Object.entries(catSales).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  mkChart('cSalesCatDonut', 'doughnut', {
+    labels: catArr.map(x=>x[0]),
+    datasets: [{ data: catArr.map(x=>x[1]), backgroundColor: PALETTE, borderWidth: 1 }]
+  }, { cutout: '65%', plugins: { legend: { display: true, position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } },
+       onClick: (e,els) => { if(els.length) toggleIntFilter('category', catArr[els[0].index][0]); } });
+
+  // 2. Sales & Profit Charts
+  const regArr = Object.entries(regStats).sort((a,b)=>b[1].s - a[1].s).slice(0,12);
+  mkChart('cRegionSPC', 'bar', {
+    labels: regArr.map(x=>x[0]),
+    datasets: [
+      { label: 'Sales', data: regArr.map(x=>x[1].s), backgroundColor: '#0d3a42' },
+      { label: 'Profit', data: regArr.map(x=>x[1].p), backgroundColor: '#e6be4c' },
+      { label: 'Cost', data: regArr.map(x=>x[1].c), backgroundColor: '#7abec0' }
+    ]
+  }, { plugins: { legend: { display: true, position: 'bottom' } } });
+
+  const topCP = Object.entries(catProfit).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  mkChart('cTopCatProfit', 'bar', {
+    labels: topCP.map(x=>x[0]),
+    datasets: [{ data: topCP.map(x=>x[1]), backgroundColor: PALETTE, borderRadius: 4 }]
+  });
+
+  mkChart('cTopCatSales', 'bar', {
+    labels: catArr.map(x=>x[0]),
+    datasets: [{ data: catArr.map(x=>x[1]), backgroundColor: PALETTE, borderRadius: 4 }]
+  }, { indexAxis: 'y' });
+
+  const segArr = Object.entries(segSales).sort((a,b)=>b[1]-a[1]);
+  mkChart('cSalesSegment', 'doughnut', {
+    labels: segArr.map(x=>x[0]),
+    datasets: [{ data: segArr.map(x=>x[1]), backgroundColor: ['#0d3a42','#1b6b73','#7abec0'], borderWidth: 1 }]
+  }, { cutout: '65%', plugins: { legend: { display: true, position: 'right' } },
+       onClick: (e,els) => { if(els.length) toggleIntFilter('segment', segArr[els[0].index][0]); } });
+
+  // 3. Shipping & Cancel Rate
+  document.getElementById('kpiShipping').innerHTML = [
+    ['Avg Scheduled Days', (totSched/n).toFixed(2)],
+    ['Avg Shipping Days', (totReal/n).toFixed(2)],
+    ['Cancel Rate %', (cancelCnt/n*100).toFixed(2) + '%'],
+    ['Late Delivery %', (lateCnt/n*100).toFixed(2) + '%'],
+    ['Avg Delay Days', ((totReal - totSched)/n).toFixed(2)]
+  ].map(([l,v]) => `<div class="kpi-card"><div class="k-label">${l}</div><div class="k-val">${v}</div></div>`).join('');
+
+  const modes = ['FIRST CLASS','SECOND CLASS','SAME DAY','STANDARD CLASS'];
+  mkChart('cLateByMode', 'bar', {
+    labels: modes,
+    datasets: [{ data: modes.map(md => modeStats[md] ? (modeStats[md].late/modeStats[md].cnt*100) : 0), backgroundColor: '#0d3a42', borderRadius: 4 }]
+  }, { indexAxis: 'y' });
+
+  const catCancArr = Object.keys(catCnt).map(ct => [ct, ((catCanc[ct]||0)/catCnt[ct]*100)]).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  mkChart('cCancelByCat', 'bar', {
+    labels: catCancArr.map(x=>x[0]),
+    datasets: [{ data: catCancArr.map(x=>x[1]), backgroundColor: '#1b6b73', borderRadius: 4 }]
+  }, { indexAxis: 'y' });
+
+  const mktCancArr = Object.keys(mktCnt).map(mk => [mk, ((mktCanc[mk]||0)/mktCnt[mk]*100)]).sort((a,b)=>b[1]-a[1]);
+  mkChart('cCancelByMarket', 'bar', {
+    labels: mktCancArr.map(x=>x[0]),
+    datasets: [{ data: mktCancArr.map(x=>x[1]), backgroundColor: '#0d3a42', borderRadius: 4 }]
+  }, { indexAxis: 'y' });
+
+  const modesBar = ['STANDARD CLASS','SECOND CLASS','FIRST CLASS','SAME DAY'];
+  mkChart('cSchedVsReal', 'bar', {
+    labels: modesBar,
+    datasets: [
+      { label: 'Avg Scheduled', data: modesBar.map(md => modeStats[md] ? modeStats[md].sched/modeStats[md].cnt : 0), backgroundColor: '#0d3a42' },
+      { label: 'Avg Shipping', data: modesBar.map(md => modeStats[md] ? modeStats[md].real/modeStats[md].cnt : 0), backgroundColor: '#4fa3a5' }
+    ]
+  }, { plugins: { legend: { display: true, position: 'bottom' } } });
+
+  const delArr = Object.entries(delMap).sort((a,b)=>b[1]-a[1]);
+  mkChart('cDeliveryStatus', 'doughnut', {
+    labels: delArr.map(x=>x[0]),
+    datasets: [{ data: delArr.map(x=>x[1]), backgroundColor: ['#0d3a42','#1b6b73','#4fa3a5','#e6be4c'] }]
+  }, { cutout: '65%', plugins: { legend: { display: true, position: 'right' } } });
+
+  // 4. Predictive Charts
+  mkChart('cFeatLate', 'bar', {
+    labels: ['Days scheduled','Segment_CONSUMER','State_ND','Cat_BOOKS','Cat_VIDEO GAMES'],
+    datasets: [{ data: [98, 1.2, 0.4, 0.2, 0.2], backgroundColor: '#0d3a42', borderRadius: 4 }]
+  }, { indexAxis: 'y' });
+  mkChart('cFeatDays', 'bar', {
+    labels: ['Days scheduled','State_NY','Region_C.AFRICA','Mode_STANDARD','State_AZ'],
+    datasets: [{ data: [97, 1.1, 0.8, 0.6, 0.5], backgroundColor: '#1b6b73', borderRadius: 4 }]
+  }, { indexAxis: 'y' });
+  mkChart('cActVsPred', 'bar', {
+    labels: ['SECOND CLASS','STANDARD CLASS','FIRST CLASS','SAME DAY'],
+    datasets: [
+      { label: 'Decision Tree (Tuned)', data: [4.0, 4.0, 2.0, 0.5], backgroundColor: '#0d3a42' },
+      { label: 'Actual', data: ['SECOND CLASS','STANDARD CLASS','FIRST CLASS','SAME DAY'].map(md => modeStats[md] ? modeStats[md].real/modeStats[md].cnt : 0), backgroundColor: '#1b6b73' }
+    ]
+  }, { plugins: { legend: { display: true, position: 'bottom' } } });
+
+  renderTablePage();
+}
+
+// Fast O(PAGE_SIZE) table pagination without copying 180k rows
+function renderTablePage() {
+  const len = filteredCache.length;
+  const totalPages = Math.ceil(len / PAGE_SIZE) || 1;
+  if (page > totalPages) page = totalPages;
+  if (page < 1) page = 1;
+
+  const startOffset = (page - 1) * PAGE_SIZE;
+  const endOffset = Math.min(len, startOffset + PAGE_SIZE);
+  let html = '';
+  for (let i = startOffset; i < endOffset; i++) {
+    const r = filteredCache[len - 1 - i]; // reverse chronological / newest first
+    const cls = r.delStatus==='LATE DELIVERY' ? 'late' : (r.delStatus==='SHIPPING CANCELED' ? 'cancel' : 'ok');
+    html += `<tr>
+      <td>${r.market}</td><td>${r.region}</td><td>${r.segment}</td><td>${r.category}</td>
+      <td>${r.mode}</td><td><span class="pill ${cls}">${r.delStatus}</span></td><td>${MONTHS[r.monthIdx]}</td>
+      <td><strong>$${r.sales.toFixed(2)}</strong></td>
+      <td style="color:${r.profit>=0?'#03543f':'#b91c1c'};font-weight:700">$${r.profit.toFixed(2)}</td>
+    </tr>`;
+  }
+  document.getElementById('tableBody').innerHTML = html || '<tr><td colspan="9" style="text-align:center;padding:20px">No matching records</td></tr>';
+  document.getElementById('pageInfo').textContent = lang==='ar'
+    ? `صفحة ${page.toLocaleString()} من ${totalPages.toLocaleString()} (إجمالي ${len.toLocaleString()} سجل)`
+    : `Page ${page.toLocaleString()} of ${totalPages.toLocaleString()} (${len.toLocaleString()} records)`;
+  document.getElementById('btnPrev').disabled = page === 1;
+  document.getElementById('btnNext').disabled = page === totalPages;
+}
+
+function changePage(d) { page += d; renderTablePage(); }
+
+function route(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.getElementById('nav-'+id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleLang() {
+  lang = lang==='en' ? 'ar' : 'en';
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang==='ar' ? 'rtl' : 'ltr';
+  const t = i18n[lang];
+  document.getElementById('t-title').innerHTML = t.title;
+  document.getElementById('t-sub').textContent = t.sub;
+  Object.entries(t.nav).forEach(([k,v]) => document.getElementById('nav-'+k).textContent = v);
+  document.getElementById('btnUpload').textContent = t.btnUpload;
+  document.getElementById('btnLang').textContent = t.btnLang;
+  document.getElementById('btnReset').textContent = t.btnReset;
+  document.getElementById('btnClearInt').textContent = t.clearInt;
+  updateStatusStrip();
+  renderTablePage();
+}
+
+document.getElementById('addForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const del = document.getElementById('aDelStatus').value;
+  const monthName = document.getElementById('aMonth').value;
+  const newOrder = {
+    market: document.getElementById('aMarket').value,
+    region: document.getElementById('aRegion').value.trim().toUpperCase(),
+    segment: document.getElementById('aSegment').value,
+    category: document.getElementById('aCategory').value.trim().toUpperCase(),
+    product: document.getElementById('aProduct').value.trim().toUpperCase(),
+    mode: document.getElementById('aMode').value,
+    delStatus: del,
+    orderStatus: del==='SHIPPING CANCELED' ? 'CANCELED' : 'COMPLETE',
+    monthIdx: Math.max(0, MONTHS.indexOf(monthName)),
+    sales: Number(document.getElementById('aSales').value),
+    profit: Number(document.getElementById('aProfit').value),
+    sched: Number(document.getElementById('aSched').value),
+    real: Number(document.getElementById('aReal').value),
+    late: del==='LATE DELIVERY' ? 1 : 0,
+    orderId: 'NEW-' + Date.now(),
+    custId: 'CUST-' + Math.floor(10000 + Math.random()*90000)
+  };
+  customOrders.push(newOrder);
+  saveCustomOrders();
+  rebuildAllRecords();
+  populateFilters();
+  updateStatusStrip();
+  updateAll();
+  toast(lang==='ar' ? 'تمت إضافة الطلب وتحديث اللوحة!' : 'Order added and dashboard updated!');
+  e.target.reset();
+  route('overview');
+});
+
+loadCustomOrders();
+rebuildAllRecords();
+populateFilters();
+updateStatusStrip();
+updateAll();
+</script>
+</body>
+</html>
