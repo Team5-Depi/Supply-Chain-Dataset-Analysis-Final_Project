@@ -2,6 +2,10 @@
 
 This directory contains the Power BI Desktop workbook (`SupplyChain.pbix`) and visual exports of the green-themed executive dashboard.
 
+## Interactive Dashboard Demo Video
+
+- [Watch Dashboard Demo Video (MP4)](dashboard/Dashboard_Demo.mp4)
+
 ## Dashboard Pages
 
 ### Overview
