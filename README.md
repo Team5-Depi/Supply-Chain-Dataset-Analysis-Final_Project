@@ -182,7 +182,7 @@ The project was completed collaboratively by **Team 5 (DEPI)**, with responsibil
 
 - **Mohamed Salah:** SQL Server database design, Snowflake Schema modeling (`fact_order_items` and dimension tables), SQL scripts, and database backup (`Database/Database.zip`).
 - **Donia Ragab and Dalia Hamdy:** Collaborated on data quality profiling, data cleaning (`Data/Cleaned data/Cleaning Data code.ipynb` & `DataCoSupplyChain_Cleaned.csv`), Exploratory Data Analysis (EDA), KPI definitions, DAX measures in Power BI (`Report/Analysis and Measures.docx`), and implementing the moving information ticker in the dashboard.
-- **Omar El-Zayat:** Leakage-free predictive modeling in Python (`Scikit-learn`, `Pandas`, `Matplotlib`) across all three targets (`Late Delivery Risk`, `Days for Shipping Real`, `Benefit per Order`), Power BI predictive integration, and final modeling report (`Report/Predictive_Modeling_Report_Final.docx`).
+- **Omar El-Zayat:** Leakage-free predictive modeling in Python (`Scikit-learn`, `Pandas`, `Matplotlib`) across all three targets (`Late Delivery Risk`, `Days for Shipping Real`, `Benefit per Order`), Power BI predictive integration, and final modeling report (`Report/Predictive_Modeling_Report_Final.docx`), and developing the interactive HTML web application (`Website/Website.html`).
 - **Menna Emad:** Interactive Power BI dashboard design, KPI cards, charts, slicers, visual layout, and final dashboard exports (`Power BI/SupplyChain.pbix` & `Power BI/dashboard/`).
 
 ## References
