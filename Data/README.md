@@ -1,13 +1,24 @@
 # Data
 
-This folder contains both the original raw files and the cleaned dataset used across SQL Server, Power BI, and the Machine Learning pipelines.
+This directory stores both the original raw DataCo Supply Chain files and the cleaned dataset used across the SQL Server data warehouse, Power BI model, and Python machine learning pipelines.
 
-## Contents
+## Directory Structure
 
-### 1. `Original data/`
-- `DataCoSupplyChainDataset.csv`: Raw DataCo Supply Chain dataset (~180,519 rows).
-- `DescriptionDataCoSupplyChain.csv`: Data dictionary describing each field in the original dataset.
-- `tokenized_access_logs.csv`: Raw web clickstream/access logs associated with the DataCo store.
+```text
+Data/
+├── Original data/
+│   ├── DataCoSupplyChainDataset.csv
+│   ├── DescriptionDataCoSupplyChain.csv
+│   └── tokenized_access_logs.csv
+└── Cleaned data/
+    └── DataCoSupplyChain_Cleaned.csv
+```
 
-### 2. `Cleaned data/`
-- `DataCoSupplyChain_Cleaned.csv`: Cleaned and standardized dataset (**180,519 order-item records**, **34 columns**, **zero missing values**, covering **2015–2018**).
+## Dataset Details
+
+- **Original data (`Original data/`):**
+  - `DataCoSupplyChainDataset.csv`: Raw transactional supply chain dataset.
+  - `DescriptionDataCoSupplyChain.csv`: Field-level data dictionary describing original columns.
+  - `tokenized_access_logs.csv`: Raw web clickstream/access logs.
+- **Cleaned data (`Cleaned data/`):**
+  - `DataCoSupplyChain_Cleaned.csv`: Standardized dataset containing **180,519 order-item records × 34 columns**, covering **2015–2018** with **zero missing values**.

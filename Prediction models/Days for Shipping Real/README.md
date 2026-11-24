@@ -1,21 +1,22 @@
 # Days for Shipping Real (Regression)
 
-**Business Question:** *How many actual days will shipping take (`0` to `6` days, mean = `3.498`)?*  
-**Decision Supported:** Improving customer delivery-time estimates and SLA planning.
+Predicts actual shipping duration in days (`0` to `6` days, mean = `3.498`) to improve delivery-time estimates and SLA planning.
+
+[![Days for Shipping Real Power BI Page](PowerBI_Modeling_DFS.jpg)](PowerBI_Modeling_DFS.jpg)
 
 ## Contents
 
-- `days_for_shipping_real_clean.py`: End-to-end leakage-free regression pipeline.
-- `dfs_predictions.csv`: Out-of-sample test predictions (`36,104` rows) linked to Power BI via `Order Item Id`.
-- `dfs_comparison.csv`: Model performance summary across Linear Regression, Decision Tree (Base), and Decision Tree (Tuned).
-- `dfs_importance.csv`: Feature importance comparison between Base and Tuned Decision Trees.
+- `days_for_shipping_real_clean.py`: Leakage-free regression pipeline.
+- `dfs_predictions.csv`: Test-set predictions (`36,104` rows, joined to Power BI via `Order Item Id`).
+- `dfs_comparison.csv`: Model comparison table across Linear Regression, Decision Tree (Base), and Decision Tree (Tuned).
+- `dfs_importance.csv`: Base vs. Tuned Decision Tree feature importances.
 - `plots/`: 8 Matplotlib figures (Actual vs. Predicted scatter plots, Base & Tuned Decision Tree diagrams, Feature Importance charts, and R² Comparison).
-- `PowerBI_Modeling_DFS.jpg`: Power BI modeling page for Days for Shipping (Real).
+- `PowerBI_Modeling_DFS.jpg`: Power BI modeling page snapshot.
 
-## Evaluation Summary (36,104 Test Orders)
+## Key Results (36,104 Test Orders)
 
 | Model | R² | MSE | MAE (Days) |
-| :--- | :---: | :---: | :---: |
+|---|---:|---:|---:|
 | Linear Regression | 0.392 | 1.602 | 0.983 |
 | Decision Tree (Base) | 0.392 | 1.602 | 0.981 |
 | Decision Tree (Tuned) | 0.392 | 1.602 | 0.981 |
