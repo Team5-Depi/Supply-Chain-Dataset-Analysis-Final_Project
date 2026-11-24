@@ -2,7 +2,7 @@
 
 Predicts whether an order will be delivered late (`0 = On Time`, `1 = Late`) prior to dispatch to support proactive flagging of high-risk orders.
 
-[![Late Delivery Risk Power BI Page](PowerBI_Modeling_LDR.jpg)](PowerBI_Modeling_LDR.jpg)
+[![Late Delivery Risk Power BI Modeling](PowerBI_Modeling_LDR.jpg)](PowerBI_Modeling_LDR.jpg)
 
 ## Contents
 
@@ -23,3 +23,22 @@ Predicts whether an order will be delivered late (`0 = On Time`, `1 = Late`) pri
 
 - **Confusion Matrix (Tuned):** `14,396` True Negatives, `1,912` False Positives, `9,032` False Negatives, `10,764` True Positives.
 - **Top Feature:** `Days for shipment (scheduled)` accounts for **99.79%** of splitting importance after tuning.
+
+## Model Plots
+
+[![Figure 2026-11-23 052356 (16).png](plots/Figure%202026-11-23%20052356%20%2816%29.png)](plots/Figure%202026-11-23%20052356%20%2816%29.png)
+
+[![Figure 2026-11-23 052356 (17).png](plots/Figure%202026-11-23%20052356%20%2817%29.png)](plots/Figure%202026-11-23%20052356%20%2817%29.png)
+
+[![Figure 2026-11-23 052356 (18).png](plots/Figure%202026-11-23%20052356%20%2818%29.png)](plots/Figure%202026-11-23%20052356%20%2818%29.png)
+
+[![Figure 2026-11-23 052356 (19).png](plots/Figure%202026-11-23%20052356%20%2819%29.png)](plots/Figure%202026-11-23%20052356%20%2819%29.png)
+
+[![Figure 2026-11-23 052356 (20).png](plots/Figure%202026-11-23%20052356%20%2820%29.png)](plots/Figure%202026-11-23%20052356%20%2820%29.png)
+
+[![Figure 2026-11-23 052356 (21).png](plots/Figure%202026-11-23%20052356%20%2821%29.png)](plots/Figure%202026-11-23%20052356%20%2821%29.png)
+
+[![Figure 2026-11-23 052356 (22).png](plots/Figure%202026-11-23%20052356%20%2822%29.png)](plots/Figure%202026-11-23%20052356%20%2822%29.png)
+
+[![Figure 2026-11-23 052356 (23).png](plots/Figure%202026-11-23%20052356%20%2823%29.png)](plots/Figure%202026-11-23%20052356%20%2823%29.png)
+

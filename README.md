@@ -2,7 +2,7 @@
 
 An end-to-end supply chain analytics, data warehousing, business intelligence, and machine learning project built with SQL Server, Microsoft Power BI, and Python (Scikit-learn) to analyze sales, profitability, shipping delays, order cancellations, and predictive risk modeling on the **DataCo Smart Supply Chain** dataset (2015–2018).
 
-[![Supply Chain Dashboard Overview](<Power BI/dashboard/Overview.jpg>)](<Power BI/dashboard/Overview.jpg>)
+[![Supply Chain Dashboard Overview](Power%20BI/dashboard/Overview.jpg)](Power%20BI/dashboard/Overview.jpg)
 
 ## Business Problem
 
@@ -40,12 +40,11 @@ Both the original datasets and the cleaned dataset are stored in the `Data/` dir
 
 1. **Dataset preparation:** Clean and standardize the raw DataCo CSV into `DataCoSupplyChain_Cleaned.csv` (`180,519` order-item records × `34` columns, zero missing values).
 2. **SQL database design:** Load staging data (`stg_dataco`), design a Snowflake Schema around `fact_order_items` and normalized customer, product, geography, date, and order/shipping dimensions, and export `CoSupplyChain.bak`.
-3. **Power BI data preparation & measures:** Connect Power BI to the Snowflake Schema and develop DAX measures for sales, net sales, profit, cost, cancellation rate, and shipping delays.
-4. **Dashboard development:** Build four interactive dashboard pages (**Overview**, **Sales & Profit**, **Shipping & Cancel Rate**, and **Predictive**).
-5. **Predictive modeling:** Implement three leakage-free 6-stage ML pipelines in Python (80/20 split, training-only preprocessing, forward feature selection, baseline linear vs. base & tuned Decision Trees).
-6. **Power BI ML integration:** Link `36,104` test-set predictions to `fact_order_items` via `Order Item Id` and build interactive predictive modeling pages.
+3. **Power BI data preparation & measures:** Connect Power BI to the Snowflake Schema and develop DAX measures for sales, net sales, profit, cost, cancellation rate, shipping delays, and a moving ticker displaying live summary metrics.
+4. **Predictive modeling & Power BI integration:** Implement three leakage-free 6-stage ML pipelines in Python (80/20 split, training-only preprocessing, forward feature selection, baseline linear vs. base & tuned Decision Trees), then link the `36,104` test-set predictions to `fact_order_items` via `Order Item Id` and build interactive Power BI modeling pages.
+5. **Dashboard development:** Combine the analytical measures and predictive outputs into four interactive dashboard pages (**Overview**, **Sales & Profit**, **Shipping & Cancel Rate**, and **Predictive**).
 
-**Workflow:** Original DataCo CSV → Data Cleaning (`DataCoSupplyChain_Cleaned.csv`, 34 columns) → SQL Server Snowflake Schema → Power BI Measures & 4-Page Dashboard → Python ML Pipelines (3 Targets) → Power BI Predictive Integration.
+**Workflow:** Original DataCo CSV → Data Cleaning (`DataCoSupplyChain_Cleaned.csv`, 34 columns) → SQL Server Snowflake Schema → Power BI Measures & Ticker → Python ML Pipelines & Power BI Predictive Integration → Interactive 4-Page Dashboard.
 
 ## Key Findings
 
@@ -73,23 +72,32 @@ These findings show that actual shipping averages **3.50 days** versus **2.93 sc
 
 The Power BI workbook (`Power BI/SupplyChain.pbix`) includes four main green-themed dashboard pages (`Power BI/dashboard/`):
 
-### 1. Overview (`Overview.jpg`)
+### 1. Overview
+
+[![Overview Dashboard](Power%20BI/dashboard/Overview.jpg)](Power%20BI/dashboard/Overview.jpg)
 - **KPI Cards:** Total Sales (`36.78M`), Total Profit (`3.97M`), Profit Margin % (`12%`), Total Orders (`66K`), Total Customers (`21K`), Avg Order Value (`502.71`).
 - **Charts:** Total Sales by month, Top 5 Products by Sales, Total Sales by market, and Total Sales by category.
 
-### 2. Sales & Profit (`Sales_and_Profit.jpg`)
+### 2. Sales & Profit
+
+[![Sales & Profit Dashboard](Power%20BI/dashboard/Sales_and_Profit.jpg)](Power%20BI/dashboard/Sales_and_Profit.jpg)
 - **Charts:** Total Sales, Total Profit, and Total Cost by region; Top 10 categories by Total Profit; Top 10 categories by Total Sales; and Total Sales by customer segment (`Consumer` 51.91%, `Corporate` 30.36%, `Home Office` 17.73%).
 
-### 3. Shipping & Cancel Rate (`Shipping_and_Cancel_Rate.jpg`)
+### 3. Shipping & Cancel Rate
+
+[![Shipping & Cancel Rate Dashboard](Power%20BI/dashboard/Shipping_and_Cancel_Rate.jpg)](Power%20BI/dashboard/Shipping_and_Cancel_Rate.jpg)
 - **KPI Cards:** Avg Scheduled Days (`2.93`), Avg Shipping Days (`3.50`), Cancel Rate % (`0.02`), Late Delivery % (`57.33%`), Avg Delay Days (`0.57`).
 - **Charts:** Late Delivery % by shipping mode, Top 10 categories by Cancel Rate %, Cancel Rate % by market, Avg Scheduled vs. Avg Shipping Days by shipping mode, and Total Orders by delivery status.
 
-### 4. Predictive (`Predictive.jpg`)
+### 4. Predictive
+
+[![Predictive Dashboard](Power%20BI/dashboard/Predictive.jpg)](Power%20BI/dashboard/Predictive.jpg)
 - **KPI Cards:** Delivery Accuracy (`69.70%`), Delivery Precision, Days R² (`0.39`), Delivery F1 (`66.30%`), Days MAE (`0.98`), Test Sample (`36.104K`).
 - **Charts:** Late Delivery Risk Feature Importance, Confusion Matrix (`Actual vs. Predicted`), Days For Shipping Feature Importance, and Actual vs. Predicted Avg. Shipping Days by Mode.
 
 ### Interactivity
-Dynamic slicers across pages filter metrics by `market_name`, `region_name`, `segment`, `category_name`, and `shipping_mode`.
+- Dynamic slicers across pages filter metrics by `market_name`, `region_name`, `segment`, `category_name`, and `shipping_mode`.
+- A moving ticker banner displays key analytical summary information across the dashboard.
 
 ## Predictive Modeling
 
@@ -163,8 +171,7 @@ Profiling and leakage-prevention steps applied before modeling:
 The project was completed collaboratively by **Team 5 (DEPI)**, with responsibilities divided across data cleaning, SQL Server warehousing, exploratory analysis, predictive modeling, and dashboard design:
 
 - **Mohamed Salah:** SQL Server database design, Snowflake Schema modeling (`fact_order_items` and dimension tables), SQL scripts, and database backup (`Database/Database.zip`).
-- **Donia Ragab:** Data quality profiling, data cleaning, and preparation of the standardized dataset (`Data/Cleaned data/DataCoSupplyChain_Cleaned.csv`).
-- **Dalia Hamdy:** Exploratory Data Analysis (EDA), business questions, KPI definitions, DAX measures in Power BI, and analytical conclusions (`Report/Analysis and Measures.docx`).
+- **Donia Ragab and Dalia Hamdy:** Collaborated on data quality profiling, data cleaning (`Data/Cleaned data/DataCoSupplyChain_Cleaned.csv`), Exploratory Data Analysis (EDA), KPI definitions, DAX measures in Power BI (`Report/Analysis and Measures.docx`), and implementing the moving information ticker in the dashboard.
 - **Omar El-Zayat:** Leakage-free predictive modeling in Python (`Scikit-learn`, `Pandas`, `Matplotlib`) across all three targets (`Late Delivery Risk`, `Days for Shipping Real`, `Benefit per Order`), Power BI predictive integration, and final modeling report (`Report/Predictive_Modeling_Report_Final.docx`).
 - **Menna Emad:** Interactive Power BI dashboard design, KPI cards, charts, slicers, visual layout, and final dashboard exports (`Power BI/SupplyChain.pbix` & `Power BI/dashboard/`).
 

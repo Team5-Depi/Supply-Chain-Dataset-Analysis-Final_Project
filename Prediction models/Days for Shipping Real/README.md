@@ -2,7 +2,7 @@
 
 Predicts actual shipping duration in days (`0` to `6` days, mean = `3.498`) to improve delivery-time estimates and SLA planning.
 
-[![Days for Shipping Real Power BI Page](PowerBI_Modeling_DFS.jpg)](PowerBI_Modeling_DFS.jpg)
+[![Days for Shipping Real Power BI Modeling](PowerBI_Modeling_DFS.jpg)](PowerBI_Modeling_DFS.jpg)
 
 ## Contents
 
@@ -23,3 +23,22 @@ Predicts actual shipping duration in days (`0` to `6` days, mean = `3.498`) to i
 
 - **Top Feature:** `Days for shipment (scheduled)` accounts for **99.84%** of importance in both Base and Tuned trees.
 - **Mean Alignment:** Tuned predicted mean (`3.498` days) matches the actual test mean (`3.498` days) with zero systematic bias.
+
+## Model Plots
+
+[![Figure 2026-11-23 052356 (8).png](plots/Figure%202026-11-23%20052356%20%288%29.png)](plots/Figure%202026-11-23%20052356%20%288%29.png)
+
+[![Figure 2026-11-23 052356 (9).png](plots/Figure%202026-11-23%20052356%20%289%29.png)](plots/Figure%202026-11-23%20052356%20%289%29.png)
+
+[![Figure 2026-11-23 052356 (10).png](plots/Figure%202026-11-23%20052356%20%2810%29.png)](plots/Figure%202026-11-23%20052356%20%2810%29.png)
+
+[![Figure 2026-11-23 052356 (11).png](plots/Figure%202026-11-23%20052356%20%2811%29.png)](plots/Figure%202026-11-23%20052356%20%2811%29.png)
+
+[![Figure 2026-11-23 052356 (12).png](plots/Figure%202026-11-23%20052356%20%2812%29.png)](plots/Figure%202026-11-23%20052356%20%2812%29.png)
+
+[![Figure 2026-11-23 052356 (13).png](plots/Figure%202026-11-23%20052356%20%2813%29.png)](plots/Figure%202026-11-23%20052356%20%2813%29.png)
+
+[![Figure 2026-11-23 052356 (14).png](plots/Figure%202026-11-23%20052356%20%2814%29.png)](plots/Figure%202026-11-23%20052356%20%2814%29.png)
+
+[![Figure 2026-11-23 052356 (15).png](plots/Figure%202026-11-23%20052356%20%2815%29.png)](plots/Figure%202026-11-23%20052356%20%2815%29.png)
+

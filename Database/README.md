@@ -11,3 +11,7 @@ This directory contains the SQL Server data warehouse backup and entity-relation
 
 1. Extract `CoSupplyChain.bak` from `Database.zip`.
 2. Open SQL Server Management Studio (SSMS), right-click **Databases** > **Restore Database...**, choose **Device**, and select `CoSupplyChain.bak`.
+
+## Schema Diagram
+
+[![Database Schema](Database_Schema.jpg)](Database_Schema.jpg)
