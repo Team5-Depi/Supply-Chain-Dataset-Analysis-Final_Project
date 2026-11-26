@@ -13,3 +13,4 @@ This directory contains the unified final graduation project report for the Supp
   - **5. Predictive Modeling:** Leakage-free 6-stage pipelines (`StandardScaler`, `OneHotEncoder`, `Forward SequentialFeatureSelector (cv=3)`, `GridSearchCV`), confusion matrix, tuned decision trees, actual vs. predicted plots, and a combined model-comparison table across all three targets (`Late Delivery Risk`, `Days for Shipping Real`, `Benefit per Order`).
   - **6. UI/UX Design & Web Application:** Four green-themed Power BI dashboard pages (`Overview`, `Sales & Profit`, `Shipping & Cancel Rate`, `Predictive`), user flow, design principles, and the standalone bilingual HTML web application (`Website/Website.html`).
   - **7. Conclusion & 8. Business Recommendations:** Early warning alerts (~85% Precision), SLA recalibration, future COGS/carrier data enrichment, and key variables to monitor.
+  - **9. Tools and Technologies & References.**

@@ -60,18 +60,18 @@ The following figures are displayed across the Power BI analytical model and das
 | Net Sales | 33.05M |
 | Total Profit | 3.97M |
 | Total Cost | 29.09M |
-| Profit Margin % | 12% |
+| Profit Margin % | 12% (of Net Sales) |
 | Total Orders | 66K |
 | Total Customers | 21K |
 | Avg Order Value | 502.71 |
 | Avg Scheduled Days | 2.93 |
 | Avg Shipping Days | 3.50 |
 | Avg Delay Days | 0.57 |
-| Late Delivery % | 57.33% |
+| Late Delivery % | 57.33% (excluding cancelled orders; 54.82% of all orders) |
 | Cancel Rate % | 0.02 (2%) |
 
-- **Sales & Profitability:** Monthly sales peak in January (`~$3.48M`) and dip in November–December (`~$2.6M–$2.7M`). **Europe** (`~$10.9M`) and **LATAM** (`~$10.3M`) lead markets, while **Fishing** (`$6.93M`, `18.84%`), **Cleats** (`$4.43M`), **Camping & Hiking** (`$4.12M`), and **Cardio Equipment** (`$3.69M`) lead both sales and profit.
-- **Shipping Delays:** Actual shipping averages **3.50 days** versus **2.93 scheduled days** (`0.57`-day avg delay), resulting in a **57.33%** late-delivery rate concentrated in **First Class** (`~100%` late) and **Second Class** (`~80%` late).
+- **Sales & Profitability:** Monthly sales peak in January (`~$3.46M`) and dip in November–December (`~$2.6M–$2.7M`). **Europe** (`~$10.9M`) and **LATAM** (`~$10.3M`) lead markets, while **Fishing** (`$6.93M`, `18.84%`), **Cleats** (`$4.43M`), **Camping & Hiking** (`$4.12M`), and **Cardio Equipment** (`$3.69M`) lead both sales and profit.
+- **Shipping Delays:** Actual shipping averages **3.50 days** versus **2.93 scheduled days** (`0.57`-day avg delay), resulting in a **57.33%** late-delivery rate (excluding cancelled orders; `54.82%` of all orders) concentrated in **First Class** (`~100%` late) and **Second Class** (`~80%` late).
 - **Cancellations:** **Transfer** payments show the highest drop-out rate (`~7.5%`), **USCA** and **LATAM** lead market cancel rates (`~2.1%–2.2%`), and **Consumer Electronics** (`~4.0%`) leads category cancellations.
 
 ## Dashboard Features
@@ -82,7 +82,7 @@ The Power BI workbook (`Power BI/SupplyChain.pbix`) includes four main green-the
 
 [![Overview Dashboard](Power%20BI/dashboard/Overview.jpg)](Power%20BI/dashboard/Overview.jpg)
 
-- **KPI Cards:** Total Sales (`36.78M`), Total Profit (`3.97M`), Profit Margin % (`12%`), Total Orders (`66K`), Total Customers (`21K`), Avg Order Value (`502.71`).
+- **KPI Cards:** Total Sales (`36.78M`), Total Profit (`3.97M`), Profit Margin % (`12%` of Net Sales), Total Orders (`66K`), Total Customers (`21K`), Avg Order Value (`502.71`).
 - **Charts:** Total Sales by month, Top 5 Products by Sales, Total Sales by market, and Total Sales by category.
 
 ### 2. Sales & Profit
@@ -95,7 +95,7 @@ The Power BI workbook (`Power BI/SupplyChain.pbix`) includes four main green-the
 
 [![Shipping & Cancel Rate Dashboard](Power%20BI/dashboard/Shipping_and_Cancel_Rate.jpg)](Power%20BI/dashboard/Shipping_and_Cancel_Rate.jpg)
 
-- **KPI Cards:** Avg Scheduled Days (`2.93`), Avg Shipping Days (`3.50`), Cancel Rate % (`0.02`), Late Delivery % (`57.33%`), Avg Delay Days (`0.57`).
+- **KPI Cards:** Avg Scheduled Days (`2.93`), Avg Shipping Days (`3.50`), Cancel Rate % (`0.02`), Late Delivery % (`57.33%`, excluding cancelled orders), Avg Delay Days (`0.57`).
 - **Charts:** Late Delivery % by shipping mode, Top 10 categories by Cancel Rate %, Cancel Rate % by market, Avg Scheduled vs. Avg Shipping Days by shipping mode, and Total Orders by delivery status.
 
 ### 4. Predictive
@@ -115,9 +115,9 @@ Three supervised learning tasks were formulated on the `180,519` cleaned records
 
 | Target Variable | Problem Type | Best / Tuned Model Metrics | Dominant Driver |
 |---|---|---|---|
-| **Late Delivery Risk** | Binary Classification | Accuracy: `69.7%`, Precision: `85.0%`, Recall: `54.4%`, F1: `66.3%` | `Days for shipment (scheduled)` (`99.79%`) |
+| **Late Delivery Risk** | Binary Classification | Accuracy: `69.7%`, Precision: `84.9%`, Recall: `54.4%`, F1: `66.3%` | `Days for shipment (scheduled)` (`99.79%`) |
 | **Days for Shipping (Real)** | Regression | `R² = 0.392`, `MSE = 1.602`, `MAE = 0.981` days | `Days for shipment (scheduled)` (`99.84%`) |
-| **Benefit per Order** | Regression | `R² = 0.024`, `MSE = 10,037.371`, `MAE = $54.068` | `Sales` (`79.65%`), `Category Name_COMPUTERS` (`10.67%`) |
+| **Benefit per Order** | Regression | `R² = 0.023`, `MSE = 10,046.056`, `MAE = $54.058` | `Sales` (`79.65%`), `Category Name_COMPUTERS` (`10.67%`) |
 
 Detailed scripts, CSV exports, Matplotlib plots, and Power BI snapshots for each target are organized under `Prediction models/`.
 

@@ -16,6 +16,6 @@ All three scripts (`pandas`, `scikit-learn`, `matplotlib`) follow the same workf
 
 | Target | Problem Type | Key Results |
 |---|---|---|
-| [`Late Delivery Risk/`](./Late%20Delivery%20Risk) | Binary Classification | Accuracy: `69.7%`, Precision: `85.0%`, F1: `66.3%` |
+| [`Late Delivery Risk/`](./Late%20Delivery%20Risk) | Binary Classification | Accuracy: `69.7%`, Precision: `84.9%`, F1: `66.3%` |
 | [`Days for Shipping Real/`](./Days%20for%20Shipping%20Real) | Regression | `R² = 0.392`, `MSE = 1.602`, `MAE = 0.981` days |
-| [`Benefit per Order/`](./Benefit%20per%20Order) | Regression | `R² = 0.024`, `MSE = 10,037.371`, `MAE = $54.068` |
+| [`Benefit per Order/`](./Benefit%20per%20Order) | Regression | `R² = 0.023`, `MSE = 10,046.056`, `MAE = $54.058` |

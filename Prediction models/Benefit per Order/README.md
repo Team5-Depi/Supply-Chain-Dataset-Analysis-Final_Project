@@ -22,7 +22,7 @@ Evaluates whether pre-fulfillment order attributes can predict order profitabili
 | Decision Tree (Tuned) | 0.023 | 10,046.056 | 54.058 |
 
 - **Pruning Impact:** Tuning eliminated overfitting (`R²` improved from `-0.011` to `0.023`), shifting importance from noisy state indicators to `Sales` (**79.65%**), `Category Name_COMPUTERS` (**10.67%**), and `Order Item Discount Rate` (**7.06%**).
-- **Finding:** Low `R²` (`0.024`) confirms that without unit-cost/COGS data, pre-order attributes alone cannot accurately predict net order profit.
+- **Finding:** Low `R²` (`0.023`) confirms that without unit-cost/COGS data, pre-order attributes alone cannot accurately predict net order profit.
 
 ## Model Plots
 

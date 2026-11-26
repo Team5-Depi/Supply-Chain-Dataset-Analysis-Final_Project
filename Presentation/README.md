@@ -14,7 +14,7 @@ This directory contains the final graduation project presentation deck, styled i
   7. **SQL Server Database Design:** `stg_dataco`, `fact_order_items`, and 18 normalized dimensions.
   8. **Snowflake Schema:** Full Entity-Relationship Diagram.
   9. **Data Preparation, Measures & Ticker:** Profiling summary, moving ticker, and core DAX KPIs.
-  10. **Predictive Modeling (3 Targets):** 6-stage leakage-free pipeline, `85.0%` Precision (`Late Delivery Risk`), `R² = 0.392` (`Days for Shipping Real`), and `R² = 0.024` (`Benefit per Order`).
+  10. **Predictive Modeling (3 Targets):** 6-stage leakage-free pipeline, `84.9%` Precision (`Late Delivery Risk`), `R² = 0.392` (`Days for Shipping Real`), and `R² = 0.023` (`Benefit per Order`).
   11. **Predictive Modeling (Model Comparison):** Combined comparison table of the evaluated models across the three targets, noting that additional algorithms (Random Forest, Gradient Boosting) were evaluated and the presented models remained the best choice.
   12. **Dashboard Overview & Web App:** 4-page green-and-gold Power BI dashboard and bilingual HTML web app.
   13. **Insights & Recommendations:** SLA recalibration, cancellation hotspots, top profit drivers, and early-warning alerts.
