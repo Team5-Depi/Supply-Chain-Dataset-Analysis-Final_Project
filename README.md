@@ -4,6 +4,12 @@ An end-to-end supply chain analytics, data warehousing, business intelligence, a
 
 [![Supply Chain Dashboard Overview](Power%20BI/dashboard/Overview.jpg)](Power%20BI/dashboard/Overview.jpg)
 
+## Live Website
+
+The live web application is available at: https://supplypulse.de.deplexo.com/
+
+The simple app in this GitHub repository (`Website/Website.html`) is a separate version of the website.
+
 ## Business Problem
 
 Supply chain and e-commerce operations require clear visibility into sales performance, profit margins, shipping delays, and order cancellation drivers, alongside proactive prediction of late deliveries and shipping durations prior to dispatch. This project transforms raw transactional order-item records into a normalized SQL Server Snowflake Schema, an interactive four-page Power BI dashboard, a standalone web application, and leakage-free machine learning pipelines.
