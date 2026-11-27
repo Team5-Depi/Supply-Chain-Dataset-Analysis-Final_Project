@@ -7,3 +7,5 @@ It presents the same analysis as the Power BI dashboard: Overview, Sales & Profi
 ## Simple App
 
 A simpler, standalone version of the web application is in the [`simple app`](simple%20app/) folder. See its [README](simple%20app/README.md) for features and how to run it.
+
+A saved browser snapshot of the main website is in [`SupplyPulse-snapshot.mhtml`](SupplyPulse-snapshot.mhtml).
