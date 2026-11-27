@@ -1,6 +1,6 @@
-# Interactive Supply Chain Web Application (`Website.html`, simple app)
+# Simple Page (`Website.html`, HTML page)
 
-A standalone, responsive HTML5/CSS3/JavaScript web application that mirrors the Power BI dashboard and supports full client-side CSV loading (up to **180,519 rows** from `DataCoSupplyChain_Cleaned.csv`).
+The Simple Page is a standalone, responsive HTML5/CSS3/JavaScript page that mirrors the Power BI dashboard and supports full client-side CSV loading (up to **180,519 rows** from `DataCoSupplyChain_Cleaned.csv`).
 
 ## Features
 
@@ -17,5 +17,5 @@ A standalone, responsive HTML5/CSS3/JavaScript web application that mirrors the 
 
 ## How to Run
 
-1. Open `Website/simple app/Website.html` in any modern web browser.
+1. Open `Website/Simple Page/Website.html` in any modern web browser.
 2. Explore the built-in 55-row sample or click **📂 Upload CSV** and select `Data/Cleaned data/DataCoSupplyChain_Cleaned.csv` to analyze the full dataset.

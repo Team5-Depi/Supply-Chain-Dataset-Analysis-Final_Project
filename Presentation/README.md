@@ -16,7 +16,7 @@ This directory contains the final graduation project presentation deck, styled i
   9. **Data Preparation, Measures & Ticker:** Profiling summary, moving ticker, and core DAX KPIs.
   10. **Predictive Modeling (3 Targets):** 6-stage leakage-free pipeline, `84.9%` Precision (`Late Delivery Risk`), `R² = 0.392` (`Days for Shipping Real`), and `R² = 0.023` (`Benefit per Order`).
   11. **Predictive Modeling (Model Comparison):** Combined comparison table of the evaluated models across the three targets, noting that additional algorithms (Random Forest, Gradient Boosting) were evaluated and the presented models remained the best choice.
-  12. **Dashboard Overview & Web App:** 4-page green-and-gold Power BI dashboard and bilingual HTML web app.
+  12. **Dashboard, Live Website & Simple Page:** 4-page green-and-gold Power BI dashboard, the Live Website (built by Mohamed Salah), and the bilingual HTML Simple Page.
   13. **Insights & Recommendations:** SLA recalibration, cancellation hotspots, top profit drivers, and early-warning alerts.
-  14. **Conclusion:** SQL Server + Python ML + Web App + Power BI + DAX summary.
+  14. **Conclusion:** SQL Server + Python ML + Simple Page + Power BI + DAX summary.
   15. **Thank You:** Closing Q&A slide.
