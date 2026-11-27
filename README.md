@@ -1,14 +1,14 @@
 # Supply Chain Dataset Analysis & Predictive Modeling Dashboard
 
-An end-to-end supply chain analytics, data warehousing, business intelligence, and machine learning project built with SQL Server, Microsoft Power BI, and Python (Scikit-learn) to analyze sales, profitability, shipping delays, order cancellations, and predictive risk modeling on the **DataCo Smart Supply Chain** dataset (2015–2018). The project also includes a standalone interactive HTML web application (`Website/Website.html`) supporting full client-side CSV exploration, bilingual (Arabic/English) views, and live order entry.
+An end-to-end supply chain analytics, data warehousing, business intelligence, and machine learning project built with SQL Server, Microsoft Power BI, and Python (Scikit-learn) to analyze sales, profitability, shipping delays, order cancellations, and predictive risk modeling on the **DataCo Smart Supply Chain** dataset (2015–2018). The project also includes a standalone interactive HTML web application (`Website/simple app/Website.html`) supporting full client-side CSV exploration, bilingual (Arabic/English) views, and live order entry.
 
 [![Supply Chain Dashboard Overview](Power%20BI/dashboard/Overview.jpg)](Power%20BI/dashboard/Overview.jpg)
 
 ## Live Website
 
-The live web application is available at: https://supplypulse.de.deplexo.com/
+The main website is live at: https://supplypulse.de.deplexo.com/
 
-The simple app in this GitHub repository (`Website/Website.html`) is a separate version of the website.
+The simple app in this GitHub repository (`Website/simple app/Website.html`) is a separate, simpler version of the website.
 
 ## Business Problem
 
@@ -23,7 +23,7 @@ Supply chain and e-commerce operations require clear visibility into sales perfo
 - Develop DAX measures, interactive KPIs, and a moving summary ticker in Microsoft Power BI.
 - Build leakage-free Python machine learning pipelines for three targets: **Late Delivery Risk**, **Days for Shipping (Real)**, and **Benefit per Order**.
 - Integrate out-of-sample test predictions (`36,104` rows), model comparisons, and feature importances directly into Power BI.
-- Provide a standalone responsive HTML web application (`Website/Website.html`) supporting full 180,519-row CSV upload and Arabic/English RTL/LTR switching.
+- Provide a standalone responsive HTML web application (`Website/simple app/Website.html`) supporting full 180,519-row CSV upload and Arabic/English RTL/LTR switching.
 
 ## Dataset
 
@@ -52,7 +52,7 @@ Both the original datasets and the cleaned dataset + cleaning notebook (`Cleanin
 3. **Power BI data preparation & measures:** Connect Power BI to the Snowflake Schema and develop DAX measures for sales, net sales, profit, cost, cancellation rate, shipping delays, and a moving summary ticker.
 4. **Predictive modeling & Power BI integration:** Implement three leakage-free 6-stage ML pipelines in Python (80/20 split, training-only preprocessing, forward feature selection, baseline linear vs. base & tuned Decision Trees), then link the `36,104` test-set predictions to `fact_order_items` via `Order Item Id` and build interactive Power BI modeling pages.
 5. **Dashboard development:** Combine the analytical measures and predictive outputs into four interactive dashboard pages (**Overview**, **Sales & Profit**, **Shipping & Cancel Rate**, and **Predictive**).
-6. **Web application development:** Build a standalone responsive HTML dashboard (`Website/Website.html`) starting with a 55-row preview sample and supporting full 180,519-row CSV upload, interactive filtering, order entry, and Arabic/English RTL/LTR switching.
+6. **Web application development:** Build a standalone responsive HTML dashboard (`Website/simple app/Website.html`) starting with a 55-row preview sample and supporting full 180,519-row CSV upload, interactive filtering, order entry, and Arabic/English RTL/LTR switching.
 
 **Workflow:** Original DataCo CSV → Data Cleaning (`DataCoSupplyChain_Cleaned.csv`, 34 columns) → SQL Server Snowflake Schema → Power BI Measures & Ticker → Python ML Pipelines & Power BI Predictive Integration → Interactive 4-Page Dashboard & HTML Web Application.
 
@@ -135,7 +135,7 @@ Detailed scripts, CSV exports, Matplotlib plots, and Power BI snapshots for each
 
 ## Interactive Web App (HTML)
 
-The project includes a standalone HTML web application at `Website/Website.html` featuring a green-and-gold executive theme, 6 interactive pages (**Overview**, **Sales & Profit**, **Shipping & Cancel Rate**, **Predictive**, **Data Records**, and **+ Add Order**), a built-in **55-row default sample**, full **180,519-row CSV upload** via `PapaParse`, chart-click cross-filtering, `localStorage` persistence for new orders, and **Arabic / English** RTL/LTR language switching.
+The project includes a standalone HTML web application at `Website/simple app/Website.html` featuring a green-and-gold executive theme, 6 interactive pages (**Overview**, **Sales & Profit**, **Shipping & Cancel Rate**, **Predictive**, **Data Records**, and **+ Add Order**), a built-in **55-row default sample**, full **180,519-row CSV upload** via `PapaParse`, chart-click cross-filtering, `localStorage` persistence for new orders, and **Arabic / English** RTL/LTR language switching.
 
 ## Repository Structure
 
@@ -178,8 +178,10 @@ supply-chain-dataset-analysis-final_project/
 │   ├── Supply_Chain_Dataset_Analysis_Report.pdf
 │   └── README.md
 ├── Website/
-│   ├── Website.html
-│   └── README.md
+│   ├── README.md
+│   └── simple app/
+│       ├── Website.html
+│       └── README.md
 └── README.md
 ```
 
@@ -189,7 +191,7 @@ supply-chain-dataset-analysis-final_project/
 2. **SQL Server Database:** Extract `CoSupplyChain.bak` from `Database/Database.zip` and restore it in SQL Server Management Studio (SSMS) following `Database/Database_Schema.jpg`.
 3. **Predictive Models:** Run the three Python scripts inside `Prediction models/<Target>/` (`late_delivery_risk_clean.py`, `days_for_shipping_real_clean.py`, `benefit_per_order_clean.py`) to reproduce the `*_predictions.csv`, `*_comparison.csv`, `*_importance.csv` outputs and plots.
 4. **Power BI Dashboard:** Open `Power BI/SupplyChain.pbix` in Power BI Desktop, update data source paths if prompted, refresh the model, and explore all four dashboard pages.
-5. **Web Application:** Open `Website/Website.html` in a modern browser (starts with 55 sample rows, or click **📂 Upload CSV** to load `Data/Cleaned data/DataCoSupplyChain_Cleaned.csv`).
+5. **Web Application:** Open `Website/simple app/Website.html` in a modern browser (starts with 55 sample rows, or click **📂 Upload CSV** to load `Data/Cleaned data/DataCoSupplyChain_Cleaned.csv`).
 
 ## Data Quality and Preparation
 
@@ -204,7 +206,7 @@ Profiling and leakage-prevention steps applied before modeling:
 
 The project was completed collaboratively by **Team 5 (DEPI)**, with responsibilities divided across data cleaning, SQL Server warehousing, exploratory analysis, predictive modeling, web development, and dashboard design:
 
-- **Omar El-Zayat (Team Leader):** Project coordination, leakage-free predictive modeling in Python (`Scikit-learn`, `Pandas`, `Matplotlib`) across all three targets (`Late Delivery Risk`, `Days for Shipping Real`, `Benefit per Order`), Power BI predictive integration, developing the interactive HTML web application (`Website/Website.html`), and compiling the final project report (`Report/Supply_Chain_Dataset_Analysis_Report.pdf`).
+- **Omar El-Zayat (Team Leader):** Project coordination, leakage-free predictive modeling in Python (`Scikit-learn`, `Pandas`, `Matplotlib`) across all three targets (`Late Delivery Risk`, `Days for Shipping Real`, `Benefit per Order`), Power BI predictive integration, developing the interactive HTML web application (`Website/simple app/Website.html`), and compiling the final project report (`Report/Supply_Chain_Dataset_Analysis_Report.pdf`).
 - **Mohamed Salah:** SQL Server database design, Snowflake Schema modeling (`fact_order_items` and 18 dimension tables), SQL scripts, and database backup (`Database/Database.zip`).
 - **Donia Ragab and Dalia Hamdy:** Collaborated on data quality profiling, data cleaning (`Data/Cleaned data/Cleaning Data code.ipynb` & `DataCoSupplyChain_Cleaned.csv`), Exploratory Data Analysis (EDA), KPI definitions, DAX measures in Power BI, and implementing the moving information ticker in the dashboard.
 - **Menna Emad:** Interactive Power BI dashboard design, KPI cards, charts, slicers, visual layout, and final dashboard exports (`Power BI/SupplyChain.pbix` & `Power BI/dashboard/`).
