@@ -37,7 +37,7 @@ Both the original datasets and the cleaned dataset + cleaning notebook (`Cleanin
 
 ## Tools and Technologies
 
-- SQL Server & T-SQL (Snowflake Schema & `.bak` backup)
+- SQL Server (Snowflake Schema & `.bak` backup)
 - Microsoft Power BI & DAX
 - Python & Jupyter Notebook
 - Pandas, NumPy & Seaborn
